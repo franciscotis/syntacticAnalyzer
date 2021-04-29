@@ -1,0 +1,6 @@
+typedef int Oi;
+struct pessoa{
+    var{
+        int a;
+    }
+}
