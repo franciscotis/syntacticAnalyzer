@@ -94,7 +94,6 @@ class Lexical:
                             else:
                                 self.current_state = 0
                                 self.back()
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                     elif(self.current_state==2):
                         if(self.current_token.isValid(currentChar) and not Token.isSpace(currentChar)):
@@ -107,7 +106,6 @@ class Lexical:
                             else:
                                 self.current_state = 0
                                 self.back()
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                     elif self.current_state ==3:
                         if(self.current_token.isValid(currentChar) and not Token.isSpace(currentChar)):
@@ -120,12 +118,10 @@ class Lexical:
                             elif Token.isSpace(currentChar):
                                 self.current_state = 0
                                 self.back()
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                             else:
                                 self.current_state = 0
                                 self.back()
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                     elif self.current_state ==4:
                         if(self.current_token.isValid(currentChar) and not Token.isSpace(currentChar)):
@@ -138,12 +134,10 @@ class Lexical:
                             elif Token.isSpace(currentChar):
                                 self.current_state = 0
                                 self.back()
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                             else:
                                 self.current_state = 0
                                 self.back()
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                     elif self.current_state==5:
                         if(self.current_token.isValid(currentChar) and not Token.isSpace(currentChar)):
@@ -156,12 +150,10 @@ class Lexical:
                             elif Token.isSpace(currentChar):
                                 self.current_state = 0
                                 self.back()
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                             else:
                                 self.current_state = 0
                                 self.back()
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                     elif self.current_state==6:
                         if(self.current_token.isValid(currentChar) and not Token.isSpace(currentChar)):
@@ -174,12 +166,10 @@ class Lexical:
                             elif Token.isSpace(currentChar):
                                 self.current_state = 0
                                 self.back()
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                             else:
                                 self.current_state = 0
                                 self.back()
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                     elif self.current_state==7:
                         if(self.current_token.isInlineComment()):
@@ -200,7 +190,6 @@ class Lexical:
                         if(self.current_token.isBreakLine(currentChar)):
                             self.back()
                             self.current_state = 0
-                            self.token_list.append(self.current_token.returnValue(self.current_line))
                             return self.current_token.returnValue(self.current_line)
                         elif(self.current_token.isValid(currentChar)): pass
                         elif(Token.isStringDelimeter(currentChar)):
@@ -208,7 +197,6 @@ class Lexical:
                             if(not self.current_token.isEscapedDelimeter(prevChar+currentChar)):
                                 self.current_token.setError()
                                 self.current_state = 0
-                                self.token_list.append(self.current_token.returnValue(self.current_line))
                                 return self.current_token.returnValue(self.current_line)
                         elif(not Token.isSymbol(currentChar)):
                             self.current_token.unknown_symbol = True
@@ -217,7 +205,6 @@ class Lexical:
                     if(self.current_token and self.current_token.value!="//"):
                         token = self.current_token.returnValue(self.current_line)
                         self.current_token = None
-                        self.token_list.append(token)
                         return token
                     return
         else:

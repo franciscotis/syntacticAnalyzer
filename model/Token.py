@@ -16,8 +16,13 @@ class Token:
 
     def getToken(self):
         #Função que retorna o token formatado com a linha atual, o tipo e o seu valor
-        return "{} {} {}".format(self.current_line,self.type, self.value)
+        return self
 
+    def getValue(self):
+        return self.value
+
+    def getType(self):
+        return self.type
     
     def setType(self,type):
         #Função que altera o tipo de token
