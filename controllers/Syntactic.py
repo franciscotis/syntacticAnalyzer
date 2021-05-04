@@ -89,7 +89,7 @@ class Syntactic:
     def contTypedefDeclaration(self):
         if self.dataType():
             self.getNextToken()
-            if self.token.getType()=="ID":
+            if self.token.getType()=="IDE":
                 self.getNextToken()
                 if self.token.getValue() == ';':
                     self.getNextToken()
@@ -100,9 +100,9 @@ class Syntactic:
                 return 'Expecting identifier token'
         elif self.token.getValue() == 'struct':
             self.getNextToken()
-            if self.token.getType()=="ID":
+            if self.token.getType()=="IDE":
                 self.getNextToken()
-                if self.token.getType()=="ID":
+                if self.token.getType()=="IDE":
                     self.getNextToken()
                     return True
                 return 'Expecting identifier token'
@@ -113,7 +113,7 @@ class Syntactic:
     def structDeclaration(self):
         if(self.token.getValue() == 'struct'):
             self.getNextToken()
-            if(self.token.getType()=="ID"):
+            if(self.token.getType()=="IDE"):
                 self.getNextToken()
                 return self.structVars()
             return 'Expecting identifier token'
@@ -132,7 +132,7 @@ class Syntactic:
             return  'Expecting var token'
         elif(self.token.getValue() == 'extends'):
             self.getNextToken()
-            if(self.token.getType()=="ID"):
+            if(self.token.getType()=="IDE"):
                 self.getNextToken()
                 if(self.token.getValue() == '{'):
                     self.getNextToken()
@@ -155,7 +155,7 @@ class Syntactic:
         return 'Expecting a data type token'
 
     def structVarId(self):
-        if(self.token.getType()=="ID"):
+        if(self.token.getType()=="IDE"):
             self.getNextToken()
             return self.structVarExp()
         return 'Expecting an identifier token'
@@ -245,7 +245,7 @@ class Syntactic:
 
     def dataType(self):
         first = ['int','real','string','boolean']
-        return True if (self.token.getValue() in first or self.token.getType()=="ID") else False
+        return True if (self.token.getValue() in first or self.token.getType()=="IDE") else False
 
 
     def inteiro(self, token):
