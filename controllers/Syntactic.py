@@ -5,8 +5,7 @@ class Syntactic:
         self.token = ''    
 
     def run(self):
-        self.token = self.getNextToken()
-        print(self.token)
+        self.getNextToken()
         self.inicio()
 
 
@@ -97,6 +96,7 @@ class Syntactic:
             if self.identificador(self.token):
                 self.getNextToken()
                 if self.token == ';':
+                    self.getNextToken()
                     return 'typedef created successfully'
                 else:
                     return "Expecting ; token"
@@ -129,6 +129,7 @@ class Syntactic:
             if(self.token == 'var'):
                 self.getNextToken()
                 if(self.token =='{'):
+                    self.getNextToken()
                     return self.firstStructVar()
                 else:
                     return 'Expecting { token'
@@ -199,9 +200,23 @@ class Syntactic:
             self.getNextToken()
             return self.proxStructVar()
 
+
+    def proxStructVar(self):
+        if(self.dataType()):
+            self.getNextToken()
+            self.structVarId()
+        elif(self.token == "}"):
+            self.getNextToken()
+            if(self.token == "}"):
+                return "struct created successfully"
+            else:
+                return "Expecting } token"
+        
+        return "Expecting } or datatype  token"
+
     def dataType(self):
         first = ['int','real','string','boolean', 'identificador']
-        return True if (self.token in first or identificador(self.token)) else False
+        return True if (self.token in first or self.identificador(self.token)) else False
 
     def identificador(self, token):
         p = re.compile('([a-z]|[A-Z])(([a-z]|[A-Z])|[0-9]|_)*')
