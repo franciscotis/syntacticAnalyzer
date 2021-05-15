@@ -1,4 +1,6 @@
 typedef int Oi;
+typedef real abc;
+typedef string def;
 struct pessoa{
     var{
         int a;
