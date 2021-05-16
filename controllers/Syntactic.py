@@ -13,9 +13,8 @@ class Syntactic:
     def getNextToken(self):
         self.token = self.lexical.nextToken()
 
-
     def inicio(self):
-        if self.token!= None:
+        if self.token is not None:
             if(self.token.getValue() in self.firstSet["TYPEDEFDECLARATION"]):
                 self.typedefDeclaration()
                 self.inicio()
@@ -31,35 +30,40 @@ class Syntactic:
             elif(self.token.getValue() in self.firstSet["METHODS"]):
                 self.methods()
             else:
-                print("Invalid Token")
+                print("ERROR. Expecting ", self.firstSet["INICIO"], " got: " +self.token.getValue()) 
 
     def header1(self):
-        if self.token.getValue() in self.firstSet["TYPEDEFDECLARATION"]:
-            self.typedefDeclaration()
-            self.header1()
-        elif self.token.getValue() in self.firstSet["STRUCTDECLARATION"]:
-            self.structDeclaration()
-            self.header1()
-        elif self.token.getValue() in self.firstSet["CONSTDECLARATION"]:
-            self.constDeclaration()
-            self.header3()
-        elif self.token.getValue() in self.firstSet["METHODS"]:
-            self.methods()
+        if self.token is not None:
+            if self.token.getValue() in self.firstSet["TYPEDEFDECLARATION"]:
+                self.typedefDeclaration()
+                self.header1()
+            elif self.token.getValue() in self.firstSet["STRUCTDECLARATION"]:
+                self.structDeclaration()
+                self.header1()
+            elif self.token.getValue() in self.firstSet["CONSTDECLARATION"]:
+                self.constDeclaration()
+                self.header3()
+            elif self.token.getValue() in self.firstSet["METHODS"]:
+                self.methods()
+            else:
+                print("ERROR. Expecting ", self.firstSet["HEADER1"], " got: " +self.token.getValue()) 
+
 
     def header2(self):
-        if self.token.getValue() in self.firstSet["TYPEDEFDECLARATION"]:
-            self.typedefDeclaration()
-            self.header2()  
-        elif self.token.getValue() in self.firstSet["STRUCTDECLARATION"]:
-            self.structDeclaration()
-            self.header2()
-        elif self.token.getValue() in self.firstSet["VARDECLARATION"]:
-            self.varDeclaration()
-            self.header3()
-        elif self.token.getValue() in self.firstSet["METHODS"]:
-            self.methods()
-        else: 
-            print("Invalid Token")
+        if self.token is not None:
+            if self.token.getValue() in self.firstSet["TYPEDEFDECLARATION"]:
+                self.typedefDeclaration()
+                self.header2()  
+            elif self.token.getValue() in self.firstSet["STRUCTDECLARATION"]:
+                self.structDeclaration()
+                self.header2()
+            elif self.token.getValue() in self.firstSet["VARDECLARATION"]:
+                self.varDeclaration()
+                self.header3()
+            elif self.token.getValue() in self.firstSet["METHODS"]:
+                self.methods()
+            else: 
+                print("ERROR. Expecting ", self.firstSet["HEADER2"], " got: " +self.token.getValue())
 
     def header3(self):
         if self.token.getValue() in self.firstSet["TYPEDEFDECLARATION"]:
@@ -71,17 +75,18 @@ class Syntactic:
         elif self.token.getValue() in self.firstSet["METHODS"]:
             self.methods()
         else: 
-            print("Invalid Token")
+            print("ERROR. Expecting ", self.firstSet["HEADER3"], " got: " +self.token.getValue())
 
     def methods(self):
-        if self.token.getValue() in self.firstSet["FUNCTION"]:
-            self.function()
-            self.methods()
-        elif self.token.getValue() in self.firstSet["PROCEDURE"]:
-            if self.token.getValue() == 'procedure':
-                self.getNextToken()
-                self.procedure()
+        if self.token is not None:
+            if self.token.getValue() in self.firstSet["FUNCTION"]:
+                self.function()
                 self.methods()
+            elif self.token.getValue() in self.firstSet["PROCEDURE"]:
+                if self.token.getValue() == 'procedure':
+                    self.getNextToken()
+                    self.procedure()
+                    self.methods()
 
 
     def value(self):
@@ -93,6 +98,12 @@ class Syntactic:
             self.aritimeticOp()
             if self.token.getValue() in self.firstSet["BOOLOPERATIONS2"] or self.token.getType() in self.firstSet["BOOLOPERATIONS2"]:
                 self.boolOperations2()
+            if self.token.getValue() == '(':
+                self.getNextToken()
+                if self.token.getValue() in self.firstSet["CONTFCALL"] or self.token.getType() in self.firstSet["CONTFCALL"]:
+                    self.contFCall()
+                else:
+                     print("ERROR. Expecting ", self.firstSet["CONTFCALL"], " got: " +self.token.getValue())
         elif self.token.getType() in self.firstSet["FUNCTIONCALL"]:
             self.functionCall()
         elif self.token.getValue() == '(':
@@ -1213,7 +1224,8 @@ class Syntactic:
             self.getNextToken()
             if self.token.getValue() in self.firstSet["VARIAVEL"] or self.token.getType() in self.firstSet["VARIAVEL"]:
                 self.variavel()
-            print("ERROR. Expecting ", self.firstSet["VARIAVEL"], " got: " +self.token.getValue())
+            else:
+                print("ERROR. Expecting ", self.firstSet["VARIAVEL"], " got: " +self.token.getValue())
         else:
             print("ERROR. Expecting ", self.firstSet["DECREMENTOP"], " got: " +self.token.getValue())
 
@@ -1362,7 +1374,7 @@ class Syntactic:
                 self.procContent3()
             else:
                  print("ERROR. Expecting ", self.firstSet["PROCCONTENT3"], " got: " +self.token.getValue())
-        elif self.token.getValue() in self.firstSet["CODIGO"]:
+        elif self.token.getValue() in self.firstSet["CODIGO"] or self.token.getType() in self.firstSet["CODIGO"]:
             self.codigo()
             if self.token.getValue() =='}':
                 self.getNextToken()
