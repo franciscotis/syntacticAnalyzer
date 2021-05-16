@@ -1546,18 +1546,17 @@ class Syntactic:
              print("ERROR. Expecting ", self.firstSet["ATRIBUICAO"], " got: " +self.token.getValue())
 
     def functionCall(self):
-        if self.token.getType() == "IDE":
+
+        if self.token.getValue() == '(':
             self.getNextToken()
-            if self.token.getValue() == '(':
-                self.getNextToken()
-                if self.token.getValue() in self.firstSet["CONTFCALL"] or self.token.getType() in self.firstSet["CONTFCALL"]:
-                    self.contFCall()
-                else:
-                     print("ERROR. Expecting ", self.firstSet["CONTFCALL"], " got: " +self.token.getValue())
+            if self.token.getValue() in self.firstSet["CONTFCALL"] or self.token.getType() in self.firstSet["CONTFCALL"]:
+                self.contFCall()
+                if self.token.getValue() == ';':
+                    self.getNextToken()
             else:
-                 print("ERROR. Expecting '(' got: " +self.token.getValue())
+                    print("ERROR. Expecting ", self.firstSet["CONTFCALL"], " got: " +self.token.getValue())
         else:
-             print("ERROR. Expecting ", self.firstSet["FUNCTIONCALL"], " got: " +self.token.getValue())
+                print("ERROR. Expecting '(' got: " +self.token.getValue())
 
     def contFCall(self):
         if self.token.getValue() in self.firstSet["VALUE"] or self.token.getType() in self.firstSet["VALUE"]:
@@ -1568,6 +1567,7 @@ class Syntactic:
                  print("ERROR. Expecting ", self.firstSet["FCALLPARAMS"], " got: " +self.token.getValue())
         elif self.token.getValue() == ')':
             self.getNextToken()
+
         else:
              print("ERROR. Expecting ", self.firstSet["CONTFCALL"], " got: " +self.token.getValue())
 
