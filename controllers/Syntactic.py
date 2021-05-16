@@ -1,9 +1,10 @@
 import re 
 class Syntactic:
-    def __init__(self, lexical, firstSet):
+    def __init__(self, lexical, firstSet, followSet):
         self.lexical = lexical
         self.token = ''    
-        self.firstSet = firstSet
+        self.firstSet  = firstSet
+        self.followSet = followSet
 
     def run(self):
         self.getNextToken()
@@ -12,6 +13,13 @@ class Syntactic:
 
     def getNextToken(self):
         self.token = self.lexical.nextToken()
+    
+    def get_error(self, rule:str):
+        while(self.token is not None):
+            for follow in self.followSet[rule]:
+                if(self.token.getValue()==follow): break
+                if(self.token.getType()==follow):  break
+            self.getNextToken()
 
     def inicio(self):
         if self.token is not None:

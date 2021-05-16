@@ -1,0 +1,742 @@
+{
+    "INICIO":     ["$"],
+    "HEADER1":    ["$"],
+    "HEADER2":    ["$"],
+    "HEADER3":    ["$"],
+    "METHODS":    ["$"],
+    "VALUE":      [ ",", ";", "]", ")", ";", ")" ],
+    "VARIAVEL":   [
+        "++", "--",   "=",
+        ",",   ";",
+        "*",  "/",    ")",
+        "]",  "+",    "-",
+        "==",   "!=",
+        "&&"
+    ],
+    "IDENTIFICADOR": [
+        "++", "--",   "=",
+        ",",   ";",
+        "*",  "/",    ")",
+        "]",  "+",    "-",
+        "==",   "!=",
+        "&&" 
+    ],
+   "CONTIDENTIFICADOR": [
+        "++", "--",   "=",
+        ",",   ";",
+        "[",  ".",    "*",
+        "/",  ")",    "]",
+        "+",  "-",    "==", 
+        "!=", "&&"
+    ],
+    "GLOBAL": [
+        "++",   "--",   "=",
+        ",",    ";",
+        "*",    "/",    ")",
+        "]",    "+",    "-",
+        "==",   "!=",
+        "&&"
+    ],
+    "LOCAL": [
+        "++", "--",   "=",
+        ",",   ";",
+        "*",  "/",    ")",
+        "]",  "+",    "-",
+        "==",   "!=",
+        "&&" 
+    ],
+    "ARITMETICVALUE": [
+        "*",  "/",  "+",
+        "-",  "]",  ")",
+        ",",  ";",  
+        "==", "=",
+        "!=", "&&" 
+    ],
+    "DATATYPE": [ "identificador", "identificador'('" ],
+    "CONTELEMENTO": [
+        "++", "--",   "=",
+        ",",   ";",
+        "[",  ".",    "*",
+        "/",  ")",    "]",
+        "+",  "-",
+        "==", "!=",   "&&"
+        
+    ],
+    "STRUCTE1": [
+        "++", "--",   "=",
+        ",",   "[",
+        ".",  ";",    "*",
+        "/",  ")",    "]",
+        "+",  "-",
+        "==", "!=",   "&&"
+        
+    ],
+    "VETORE1": [
+        "[",    ".",  "++",
+        "--",   "=",  ",",
+         ";",  "*",
+        "/",    ")",  "]",
+        "+",    "-",
+        "==",   "!=", "&&"
+        
+    ],
+    "VETORE2": [
+        "[",    ".",  "++",
+        "--",   "=",  ",",
+         ";",  "*",
+        "/",    ")",  "]",
+        "+",    "-",
+        "==",   "!=", "&&"
+        
+    ],
+    "MATRIZE1": [
+        "++", "--",   "=",
+        ",",   ";",
+        "[",  ".",    "*",
+        "/",  ")",    "]",
+        "+",  "-",    "==", 
+        "!=",   "&&"
+        
+    ],
+    "MATRIZE2": [
+        "++", "--",   "=",
+        ",",   ";",
+        "[",  ".",    "*",
+        "/",  ")",    "]",
+        "+",  "-",    "==", 
+        "!=", "&&"
+    ],
+    "VARDECLARATION": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "PRIMEIRAVAR": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "CONTINUESOS": [ "identificador" ],
+    "PROXVAR": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "VARID": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "VAREXP": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "ESTRUTURA": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "INITVETOR": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "PROXVETOR": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "CONTMATRIZ": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "INITMATRIZ": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "MATRIZVALUE": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "PROXMATRIZ": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "NEXT": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "VERIFVAR": [
+        "typedef",  "struct",
+        "const",    "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "CONSTDECLARATION": [
+        "typedef",  "struct",
+        "var",      "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "PRIMEIRACONST": [
+        "typedef",  "struct",
+        "var",      "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "CONTINUECONSTSOS": [ "identificador" ],
+    "PROXCONST": [
+        "typedef",  "struct",
+        "var",      "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "CONSTID": [
+        "typedef",  "struct",
+        "var",      "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "CONSTEXP": [
+        "typedef",  "struct",
+        "var",      "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "ESTRUTURACONST": [
+        "typedef",  "struct",
+        "var",      "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "PROXCONSTVETOR": [
+        "typedef",  "struct",
+        "var",      "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "INITCONSTMATRIZ": [
+        "typedef",  "struct",
+        "var",      "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "MATRIZCONSTVALUE": [
+        "typedef",  "struct",
+        "var",      "procedure",
+        "function", "return",
+        "++",       "--",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "}"
+    ],
+    "PROXCONSTMATRIZ": [
+        "typedef",      "struct",
+        "var",          "procedure",
+        "function",     "return",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "}"
+    ],
+    "NEXTCONST": [
+        "typedef",      "struct",
+        "var",          "procedure",
+        "function",     "return",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "}"
+    ],
+    "VERIFCONST": [
+        "typedef",      "struct",
+        "var",          "procedure",
+        "function",     "return",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "}"
+    ],
+    "FUNCTION": [ "procedure", "function" ],
+    "CONTINUEFUNCTION": [ "procedure", "function" ],
+    "PARAMETERS": [ "{" ],
+    "PARAMLOOP": [ "{" ],
+    "BlockFunction": [ "procedure", "function" ],
+    "BlockFuncContent": [ ";" ],
+    "FUNCCONTENT": [ ";" ],
+    "CONTENT1": [ ";" ],
+    "CONTENT2": [ ";" ],
+    "CONTENT3": [ ";" ],
+    "STRUCTDECLARATION": [
+        "typedef",      "struct",
+        "var",          "const",
+        "procedure",    "function",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "return",
+        "}"
+    ],
+    "STRUCTVARS": [
+        "typedef",      "struct",
+        "var",          "const",
+        "procedure",    "function",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "return",
+        "}"
+    ],
+    "FIRSTSTRUCTVAR": [
+        "typedef",      "struct",
+        "var",          "const",
+        "procedure",    "function",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "return",
+        "}"
+    ],
+    "STRUCTVARID": [
+        "typedef",      "struct",
+        "var",          "const",
+        "procedure",    "function",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "return",
+        "}"
+    ],
+    "PROXSTRUCTVAR": [
+        "typedef",      "struct",
+        "var",          "const",
+        "procedure",    "function",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "return",
+        "}"
+    ],
+    "STRUCTVAREXP": [
+        "typedef",      "struct",
+        "var",          "const",
+        "procedure",    "function",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "return",
+        "}"
+    ],
+    "STRUCTMATRIZ": [
+        "typedef",      "struct",
+        "var",          "const",
+        "procedure",    "function",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "return",
+        "}"
+    ],
+    "CONTSTRUCTMATRIZ": [
+        "typedef",      "struct",
+        "var",          "const",
+        "procedure",    "function",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "return",
+        "}"
+    ],
+    "OpNegate": [
+        "*",  "/",  "+",
+        "-",  "]",  ")",
+        ",",  ";",  
+        "==", "=",
+        "!=", "&&"
+    ],
+    "Opmult": [
+        "+",    "-",
+        "]",    ")",
+        ",",    ";",
+        "==",   "=",
+        "!=",   "&&"
+        
+    ],
+    "AUXSTATE2": [
+        "+",  "-",
+        "]",    ")",
+        ",",    ";",
+        "==",   "=",
+        "!=",   "&&"
+        
+    ],
+    "MULTSYMBOL": [
+        "-",
+        "inteiro",
+        "real",
+        "cad_caracteres",
+        "(",
+        "identificador",
+        "global",
+        "local"
+    ],
+    "AritimeticOp": [
+        "]",    ")",
+        ",",    ";",
+        "==",   "=",
+        "!=",   "&&"
+        
+    ],
+    "OPMULT2": [
+        "]",    ")",
+        ",",    ";",
+        "==",   "=",
+        "!=",   "&&"
+        
+    ],
+    "ARITSYMBOL": [
+        "-",
+        "inteiro",
+        "real",
+        "cad_caracteres",
+        "(",
+        "identificador",
+        "global",
+        "local"
+    ],
+    "OPBOOLVALUE": [
+        "==",
+        "=",    "!=",
+        "&&",
+        ")",    ",",
+        ";",    "]"
+        
+    ],
+    "RelacionalOp": [],
+    "RELSYMBOL": [
+        "-",
+        "inteiro",
+        "real",
+        "cad_caracteres",
+        "(",
+        "true",
+        "false",
+        "identificador",
+        "global",
+        "local"
+    ],
+    "OPBOOLVALUE2": [
+        "!=",   "&&",
+        ")",    ",",    
+        ";",    "]"
+    ],
+    "OPBOOLVALUE3": [
+        "!=",   "&&",
+        ")",    ",",    
+        ";",    "]"
+    ],
+    "LOGICSYMBOL": [
+        "-",
+        "inteiro",
+        "real",
+        "cad_caracteres",
+        "(",
+        "true",
+        "false",
+        "identificador",
+        "global",
+        "local"
+    ],
+    "LOGICALOP": [ ")" ],
+    "NEGBOOLVALUE": [ ")", ",", ";", "]"],
+    "INCREMENTOP": [ ";" ],
+    "DECREMENTOP": [ ";" ],
+    "BOOLOPERATIONS": [ ")", ",", ";", "]"],
+    "BOOLOPERATIONS2": [ ")", ",", ";", "]"],
+    "BOOLOPERATIONS3": [
+        "!=",   "&&",
+        ")",    ",",    
+        ";",    "]" 
+    ],
+    "BOOLOPERATIONS4": [ ")", ",", ";", "]"],
+    "TYPEDEFDECLARATION": [
+        "typedef",     "struct",
+        "var",         "const",
+        "procedure",   "function",
+        "++",          "--",
+        "print",       "identificador",
+        "read",        "global",
+        "local",       "while",
+        "if",          "return",
+        "}"
+    ],
+    "CONTTYPEDEFDEC": [
+        "typedef",      "struct",
+        "var",          "const",
+        "procedure",    "function",
+        "++",           "--",
+        "print",        "identificador",
+        "read",         "global",
+        "local",        "while",
+        "if",           "return",
+        "}"
+    ],
+    "PROCEDURE": [ "procedure", "function" ],
+    "PROCPARAM": [ "{" ],
+    "PROCCONTENT": [ "procedure", "function" ],
+    "PROCCONTENT2": [ "procedure", "function" ],
+    "PROCCONTENT3": [ "procedure", "function" ],
+    "PROCCONTENT4": [ "procedure", "function" ],
+    "CODIGO": [ "return", "}" ],
+    "COMANDO": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}"
+    ],
+    "PRINT": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}"
+    ],
+    "PRINTABLELIST": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}"
+    ],
+    "NEXTPRINTVALUE": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}"
+    ],
+    "ATRIBUICAO": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}"
+    ],
+    "FUNCTIONCALL": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}",        ",",
+        ";",        "]",
+        ")"
+    ],
+    "CONTFCALL": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}",        ",",
+        ";",        "]",
+        ")"
+    ],
+    "FCALLPARAMS": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}",        ",",
+        ";",        "]",
+        ")"
+    ],
+    "READ": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",    "global",
+        "local",   "while",
+        "if",      "return",
+        "}"
+    ],
+    "READPARAMS": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}"
+    ],
+    "READLOOP": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}"
+    ],
+    "WHILE": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}"
+    ],
+    "CONDITIONAL": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}"
+    ],
+    "ELSEPART": [
+        "++",       "--",
+        "typedef",  "struct",
+        "print",    "identificador",
+        "read",     "global",
+        "local",    "while",
+        "if",       "return",
+        "}"
+    ]
+}

@@ -13,8 +13,10 @@ class ProgramStart:
         self.txtfiles = []
         for file in glob.glob("entradas/entrada*.txt"):
             self.txtfiles.append(file)
-        self.firstSet = ''
+        self.firstSet  = ''
+        self.followSet = ''
         self.getFirstFile()
+        self.getFollowFile()
         
 
 
@@ -22,11 +24,17 @@ class ProgramStart:
         for file in self.txtfiles:
             print("----------- Analisando o arquivo {} -----------".format(file))
             lexical = Lexical(file)
-            syntactic = Syntactic(lexical, self.firstSet)
+            syntactic = Syntactic(lexical, self.firstSet, self.followSet)
             syntactic.run()
 
 
     def getFirstFile(self):
         with open('./util/first.json', 'r') as json_file:
             self.firstSet = json.load(json_file)
+
+    def getFollowFile(self):
+        with open('./util/follow.json', 'r') as json_file:
+            self.followSet = json.load(json_file)
+
+
         
