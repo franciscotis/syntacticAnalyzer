@@ -1,0 +1,80 @@
+procedure impar(){
+    struct funcionario extends pessoa{
+        var{
+            real salario;
+        }
+    }
+    typedef struct Pessoa Pessoa;
+    typedef string frase;
+    if (teste == "true")then{
+        teste = "false";
+        print(value);
+    }
+    value++;
+    if (value / 2 == 0)then{
+        teste = "true";
+    }
+}
+
+function int JOTA () {   
+    struct funcionario extends pessoa{
+        var{
+            real salario;
+        }
+    }
+    typedef struct Pessoa Pessoa;
+    typedef string frase;
+    print(i[jota][9],R8_VINTE.CASA[JOTA[788]]);
+    return jota+
+    k;
+    //opa garamba
+}
+
+function boolean k(string n){
+    var{
+        int i =0;
+        real zap = true;
+        boolean i = 8.2;
+    }
+    return i[jota][9999]+2.2+R8_VINTE.CASA[JOTA[78]];
+}
+
+procedure start50(){
+    print(i[jota][9],R8_VINTE.CASA[JOTA[78]]);
+}
+
+procedure start1 (int i){
+    print(i[K][9],R8_VINTE.CASA[JOTA[78]]);
+}
+
+function int JOTA(){
+    print(i[jota9],R8_VINTE.CASA[JOTA[78]]);
+    return true;
+}
+
+procedure JOTA(){
+    print(i[jota][9],R8_VINTE.CASA[JOTA[78]]);
+}
+
+function int JOTA(){
+    print(i[jota][9],R8_VINTE.CASA[JOTA[78]]);
+    return 8*9+10/(50)+15*12;
+}
+
+procedure start(){
+    var{
+        Pessoa Cleyton;
+        struct Pessoa xablau;
+        frase motivacional = "false oi oi";
+    }
+    print("Inicio de cdigo");
+    s = soma(k, m);
+    Pessoa.idade = 21; 
+    Pessoa.peso = 60;
+    Pessoa.altura = 170;
+    Pessoa.nome = "Cleytinho";
+    Pessoa.cpf = "000.000.000-00";
+
+    print("Digite seu nome: ");
+    read(global.pessoa2.nome);
+}

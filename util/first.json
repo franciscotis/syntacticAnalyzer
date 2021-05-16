@@ -35,22 +35,22 @@
     "true",
     "false",
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
     "!",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "VARIAVEL": [
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "IDENTIFICADOR": [
-    "identificador"
+    "IDE"
   ],
   "CONTIDENTIFICADOR": [
     null,
@@ -64,9 +64,10 @@
     "local"
   ],
   "ARITMETICVALUE": [
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
+    "IDE",
     "global",
     "local"
   ],
@@ -106,7 +107,7 @@
     "real",
     "string",
     "boolean",
-    "identificador"
+    "IDE"
   ],
   "CONTINUESOS": [
     "struct",
@@ -114,7 +115,7 @@
     "real",
     "string",
     "boolean",
-    "identificador"
+    "IDE"
   ],
   "PROXVAR": [
     "struct",
@@ -122,11 +123,11 @@
     "real",
     "string",
     "boolean",
-    "identificador",
+    "IDE",
     "}"
   ],
   "VARID": [
-    "identificador"
+    "IDE"
   ],
   "VAREXP": [
     ",",
@@ -179,7 +180,7 @@
     "real",
     "string",
     "boolean",
-    "identificador"
+    "IDE"
   ],
   "CONTINUECONSTSOS": [
     "struct",
@@ -187,7 +188,7 @@
     "real",
     "string",
     "boolean",
-    "identificador"
+    "IDE"
   ],
   "PROXCONST": [
     "struct",
@@ -195,11 +196,11 @@
     "real",
     "string",
     "boolean",
-    "identificador",
+    "IDE",
     "}"
   ],
   "CONSTID": [
-    "identificador"
+    "IDE"
   ],
   "CONSTEXP": [
     "=",
@@ -240,14 +241,14 @@
     "real",
     "string",
     "boolean",
-    "identificador"
+    "IDE"
   ],
   "PARAMETERS": [
     "int",
     "real",
     "string",
     "boolean",
-    "identificador"
+    "IDE"
   ],
   "PARAMLOOP": [
     ",",
@@ -265,7 +266,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -279,7 +280,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -294,7 +295,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -309,7 +310,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -323,7 +324,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -342,17 +343,17 @@
     "real",
     "string",
     "boolean",
-    "identificador"
+    "IDE"
   ],
   "STRUCTVARID": [
-    "identificador"
+    "IDE"
   ],
   "PROXSTRUCTVAR": [
     "int",
     "real",
     "string",
     "boolean",
-    "identificador",
+    "IDE",
     "}"
   ],
   "STRUCTVAREXP": [
@@ -371,21 +372,21 @@
   ],
   "OpNegate": [
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "Opmult": [
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
@@ -400,11 +401,11 @@
   ],
   "ARITMETICOP": [
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
@@ -419,42 +420,44 @@
   ],
   "OPBOOLVALUE": [
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
     "true",
     "false",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "RelacionalOp": [
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
     "true",
     "false",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "RELSYMBOL": [
-    "",
+    "<",
+    ">",
     "==",
-    "="
+    "<=",
+    ">="
   ],
   "OPBOOLVALUE2": [
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
     "true",
     "false",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
@@ -470,13 +473,13 @@
   ],
   "LOGICALOP": [
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
     "true",
     "false",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
@@ -485,40 +488,50 @@
   ],
   "INCREMENTOP": [
     "++",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "DECREMENTOP": [
     "--",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "BOOLOPERATIONS": [
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
     "true",
     "false",
     "!",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "BOOLOPERATIONS2": [
     "!=",
     "&&",
-    "",
+    "||",
     "==",
-    "="
+    "=",
+    "<",
+    ">",
+    "==",
+    "<=",
+    ">="
   ],
   "BOOLOPERATIONS3": [
-    "",
+    "||",
     "==",
-    "="
+    "=",
+    "<",
+    ">",
+    "==",
+    "<=",
+    ">="
   ],
   "BOOLOPERATIONS4": [
     "!=",
@@ -533,19 +546,20 @@
     "real",
     "string",
     "boolean",
-    "identificador",
+    "IDE",
     "struct"
   ],
   "PROCEDURE": [
-    "identificador",
-    "start"
+    "IDE",
+    "start",
+    "procedure"
   ],
   "PROCPARAM": [
     "int",
     "real",
     "string",
     "boolean",
-    "identificador",
+    "IDE",
     ")"
   ],
   "PROCCONTENT": [
@@ -557,7 +571,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -572,7 +586,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -587,7 +601,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -601,7 +615,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -615,7 +629,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -628,7 +642,7 @@
     "typedef",
     "struct",
     "print",
-    "identificador",
+    "IDE",
     "read",
     "global",
     "local",
@@ -642,38 +656,39 @@
     "true",
     "false",
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
     "!",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "NEXTPRINTVALUE": [
     ",",
-    ");"
+    ")",
+    ";"
   ],
   "ATRIBUICAO": [
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "FUNCTIONCALL": [
-    "identificador"
+    "IDE"
   ],
   "CONTFCALL": [
     "true",
     "false",
     ")",
     "-",
-    "inteiro",
-    "real",
-    "cad_caracteres",
+    "NRO",
+    "NRO",
+    "CAD",
     "(",
     "!",
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
@@ -685,13 +700,13 @@
     "read"
   ],
   "READPARAMS": [
-    "identificador",
+    "IDE",
     "global",
     "local"
   ],
   "READLOOP": [
     ",",
-    ");"
+    ")"
   ],
   "WHILE": [
     "while"
