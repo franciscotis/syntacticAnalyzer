@@ -387,8 +387,7 @@
         "print",        "identificador",
         "read",         "global",
         "local",        "while",
-        "if",           "return",
-        "}"
+        "if",           "return"
     ],
     "STRUCTVARS": [
         "typedef",      "struct",
