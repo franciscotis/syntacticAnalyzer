@@ -1319,9 +1319,11 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["CONTTYPEDEFDEC"] or self.token.getType() in self.firstSet["CONTTYPEDEFDEC"]:
                 self.contTypedefDeclaration()
             else:
-                 print("ERROR. Expecting ", self.firstSet["CONTTYPEDEFDEC"], " got: " +self.token.getValue())
+                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTTYPEDEFDEC"], " got: " +self.token.getValue())
+                self.getError(self.followSet["TYPEDEFDECLARATION"])
         else:
-             print("ERROR. Expecting ", self.firstSet["TYPEDEFDECLARATION"], " got: " +self.token.getValue())
+            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["TYPEDEFDECLARATION"], " got: " +self.token.getValue())
+            self.getError(self.followSet["TYPEDEFDECLARATION"])
 
     def contTypedefDeclaration(self):
         if self.dataType():
@@ -1331,10 +1333,11 @@ class Syntactic:
                 if self.token.getValue() == ';':
                     self.getNextToken()
                 else:
-                     print("ERROR. Expecting ';' got: " +self.token.getValue())
+                    print(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
+                    self.getError(self.followSet["TYPEDEFDECLARATION"])
             else:
-                 print("ERROR. Expecting 'IDE' token, got: " +self.token.getType())
-
+                print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
+                self.getError(self.followSet["TYPEDEFDECLARATION"])
         elif self.token.getValue() == 'struct':
             self.getNextToken()
             if self.token.getType()=="IDE":
@@ -1344,13 +1347,18 @@ class Syntactic:
                     if self.token.getValue() == ';':
                         self.getNextToken()
                     else:
-                         print("ERROR. Expecting ';' got: " +self.token.getValue())
+                        print(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
+                        self.getError(self.followSet["TYPEDEFDECLARATION"])
                 else:
-                     print("ERROR. Expecting 'IDE' token, got: " +self.token.getType())
+                    print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
+                    self.getError(self.followSet["TYPEDEFDECLARATION"])
             else:
-                print("ERROR. Expecting 'IDE' token,' got: " +self.token.getType())
+                print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token,' got: " +self.token.getType())
+                self.getError(self.followSet["TYPEDEFDECLARATION"])
         else:
-             print("ERROR. Expecting ", self.firstSet["CONTTYPEDEFDEC"], " got: " +self.token.getValue())
+            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTTYPEDEFDEC"], " got: " +self.token.getValue())
+            self.getError(self.followSet["TYPEDEFDECLARATION"])
+
 
     def procedure(self):
         if self.token.getType() == "IDE":

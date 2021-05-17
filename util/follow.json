@@ -578,17 +578,7 @@
         ";",    "]" 
     ],
     "BOOLOPERATIONS4": [ ")", ",", ";", "]"],
-    "TYPEDEFDECLARATION": [
-        "typedef",     "struct",
-        "var",         "const",
-        "procedure",   "function",
-        "++",          "--",
-        "print",       "identificador",
-        "read",        "global",
-        "local",       "while",
-        "if",          "return",
-        "}"
-    ],
+    "TYPEDEFDECLARATION": [ "typedef", "struct", "var", "procedure", "function"],
     "CONTTYPEDEFDEC": [
         "typedef",      "struct",
         "var",          "const",
