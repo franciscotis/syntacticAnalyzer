@@ -905,13 +905,13 @@ class Syntactic:
                     self.structVars()
                 else:
                     print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARS"], " got: " +self.token.getValue())
-                    self.getError(self.firstSet["HEADER3"])
+                    self.getError(self.firstSet["INICIO"])
             else:
                 print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
-                self.getError(self.firstSet["HEADER3"])
+                self.getError(self.firstSet["INICIO"])
         else:
             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTDECLARATION"], " got: " +self.token.getValue())
-            self.getError(self.firstSet["HEADER3"])
+            self.getError(self.firstSet["INICIO"])
         
     def structVars(self):
         if(self.token.getValue() =='{'):
@@ -924,13 +924,13 @@ class Syntactic:
                         self.firstStructVar()
                     else:
                         print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FIRSTSTRUCTVAR"], " got: " +self.token.getValue())
-                        self.getError(self.firstSet["HEADER3"])
+                        self.getError(self.firstSet["INICIO"])
                 else:
                     print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: {self.token.getValue()}")
-                    self.getError(self.firstSet["HEADER3"])
+                    self.getError(self.firstSet["INICIO"])
             else:
                 print(f"ERROR on line {self.token.current_line}: Expecting 'var' got: {self.token.getValue()}")
-                self.getError(self.firstSet["HEADER3"])
+                self.getError(self.firstSet["INICIO"])
 
         elif(self.token.getValue() == 'extends'):
             self.getNextToken()
@@ -946,22 +946,22 @@ class Syntactic:
                                  self.firstStructVar()
                             else:
                                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FIRSTSTRUCTVAR"], " got: " +self.token.getValue())
-                                self.getError(self.firstSet["HEADER3"])
+                                self.getError(self.firstSet["INICIO"])
                         else:
                             print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
-                            self.getError(self.firstSet["HEADER3"])
+                            self.getError(self.firstSet["INICIO"])
                     else:
                         print(f"ERROR on line {self.token.current_line}: Expecting 'var' got: " +self.token.getValue())
-                        self.getError(self.firstSet["HEADER3"])
+                        self.getError(self.firstSet["INICIO"])
                 else:
                     print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
-                    self.getError(self.firstSet["HEADER3"])
+                    self.getError(self.firstSet["INICIO"])
             else:
                 print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token,  got: " +self.token.getType())
-                self.getError(self.firstSet["HEADER3"])
+                self.getError(self.firstSet["INICIO"])
         else:
             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARS"], " got: " +self.token.getValue())
-            self.getError(self.firstSet["HEADER3"])
+            self.getError(self.firstSet["INICIO"])
 
         
     def firstStructVar(self):
@@ -971,10 +971,10 @@ class Syntactic:
                 self.structVarId()
             else:
                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARID"], " got: " +self.token.getValue())
-                self.getError(self.firstSet["HEADER3"])
+                self.getError(self.firstSet["INICIO"])
         else:
             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FIRSTSTRUCTVAR"], " got: " +self.token.getValue())
-            self.getError(self.firstSet["HEADER3"])
+            self.getError(self.firstSet["INICIO"])
 
     def structVarId(self):
         if(self.token.getType()=="IDE"):
@@ -983,10 +983,10 @@ class Syntactic:
                 self.structVarExp()
             else:
                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVAREXP"], " got: " +self.token.getValue())
-                self.getError(self.firstSet["HEADER3"])
+                self.getError(self.firstSet["INICIO"])
         else:
             print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
-            self.getError(self.firstSet["HEADER3"])
+            self.getError(self.firstSet["INICIO"])
     
     def structVarExp(self):
         if(self.token.getValue() == ','):
@@ -1051,17 +1051,17 @@ class Syntactic:
                 self.structVarId()
             else:
                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARID"], " got: " +self.token.getValue())
-                self.getError(self.firstSet["HEADER3"])
+                self.getError(self.firstSet["INICIO"])
         elif(self.token.getValue() == "}"):
             self.getNextToken()
             if(self.token.getValue() == "}"):
                 self.getNextToken()
             else:
                 print(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
-                self.getError(self.firstSet["HEADER3"])
+                self.getError(self.firstSet["INICIO"])
         else:
             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXSTRUCTVAR"], " got: " +self.token.getValue())
-            self.getError(self.firstSet["HEADER3"])
+            self.getError(self.firstSet["INICIO"])
     
     def opNegate(self):
         if self.token.getValue() == '-':
