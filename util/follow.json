@@ -265,7 +265,7 @@
         "print",    "identificador",
         "read",     "global",
         "local",    "while",
-        "if",       "}"
+        "if"
     ],
     "CONTINUECONSTSOS": [ "identificador" ],
     "PROXCONST": [
@@ -279,6 +279,7 @@
         "if",       "}"
     ],
     "CONSTID": [
+        ";",        "}",
         "typedef",  "struct",
         "var",      "procedure",
         "function", "return",
@@ -286,7 +287,7 @@
         "print",    "identificador",
         "read",     "global",
         "local",    "while",
-        "if",       "}"
+        "if"
     ],
     "CONSTEXP": [
         "typedef",  "struct",
@@ -296,7 +297,7 @@
         "print",    "identificador",
         "read",     "global",
         "local",    "while",
-        "if",       "}"
+        "if"
     ],
     "ESTRUTURACONST": [
         "typedef",  "struct",

@@ -14,11 +14,11 @@ class Syntactic:
     def getNextToken(self):
         self.token = self.lexical.nextToken()
     
-    def get_error(self, rule:str):
+    def getError(self, rule:str):
         while(self.token is not None):
             for follow in self.followSet[rule]:
-                if(self.token.getValue()==follow): break
-                if(self.token.getType()==follow):  break
+                if(self.token.getValue()==follow): return
+                if(self.token.getType()==follow):  return
             self.getNextToken()
 
     def inicio(self):
@@ -54,7 +54,7 @@ class Syntactic:
             elif self.token.getValue() in self.firstSet["METHODS"]:
                 self.methods()
             else:
-                print("ERROR. Expecting ", self.firstSet["HEADER1"], " got: " +self.token.getValue()) 
+                print("ERROR. Expecting ", self.firstSet["HEADER1"], " got: " +self.token.getValue())
 
 
     def header2(self):
@@ -71,7 +71,7 @@ class Syntactic:
             elif self.token.getValue() in self.firstSet["METHODS"]:
                 self.methods()
             else: 
-                print("ERROR. Expecting ", self.firstSet["HEADER2"], " got: " +self.token.getValue())
+                print("ERROR on HEADER2. Expecting ", self.firstSet["HEADER2"], " got: " +self.token.getValue())
 
     def header3(self):
         if self.token.getValue() in self.firstSet["TYPEDEFDECLARATION"]:
@@ -124,7 +124,6 @@ class Syntactic:
                     print("ERROR expecting ')' GOT "+ self.token.getValue())
             else:
                 print("ERROR expecting ", self.firstSet["LOGICALOP"] + "GOT "+ self.token.getValue())
-
     
                 
     
@@ -533,10 +532,12 @@ class Syntactic:
             if self.token.getType() == "IDE":
                 self.constId()
             else:
-                print("ERROR. Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getValue())
+                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getValue())
+                self.getError("PRIMEIRACONST")
         else:
-            print("ERROR. Expecting ", self.firstSet["CONTINUECONSTSOS"], " got: " +self.token.getValue())
-
+            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTINUECONSTSOS"], " got: " +self.token.getValue())
+            self.getError("PRIMEIRACONST")
+    
     def continueConstSos(self):
         if self.token.getValue() =='struct':
             self.getNextToken()
@@ -555,7 +556,8 @@ class Syntactic:
             if self.token.getType() in self.firstSet["CONSTID"]:
                 self.constId()
             else:
-                print("ERROR. Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getType())
+                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getType())
+                self.getError("PRIMEIRACONST")
         elif self.token.getValue() == '}':
             self.getNextToken()
         else:
@@ -567,10 +569,12 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["CONSTEXP"]:
                 self.constExp()
             else:
-                print("ERROR. Expecting ", self.firstSet["CONSTEXP"], " got: " +self.token.getValue())
+                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTEXP"], " got: " +self.token.getValue())
+                self.getError("PRIMEIRACONST")
         else:
             print("ERROR. Expecting 'IDE' token")
-        
+    
+
     def constExp(self):
         if self.token.getValue() =='=':
             self.getNextToken()
@@ -579,9 +583,11 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["VERIFCONST"]:
                     self.verifConst()
                 else:
-                    print("ERROR. Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
+                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
+                    self.getError("PRIMEIRACONST")
             else:
-                print("ERROR. Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                self.getError("PRIMEIRACONST")
         elif self.token.getValue() =='[':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["ARITMETICOP"] or self.token.getType() in self.firstSet["ARITMETICOP"]:
@@ -721,15 +727,17 @@ class Syntactic:
             if self.token.getType() in self.firstSet["CONSTID"]:
                 self.constId()
             else:
-                print("ERROR. Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getValue())
+                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getValue())
+                self.getError("PRIMEIRACONST")
+
         elif self.token.getValue() == ';':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["PROXCONST"] or self.token.getType() in self.firstSet["PROXCONST"]:
                 self.proxConst()
             else:
-                print("ERROR. Expecting ", self.firstSet["PROXCONST"], " got: " +self.token.getValue())
+                print("ERROR verifConst. Expecting ", self.firstSet["PROXCONST"], " got: " +self.token.getValue())
         else:
-            print("ERROR. Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
+            print("ERROR verifConst. Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
 
     
     def function(self):
