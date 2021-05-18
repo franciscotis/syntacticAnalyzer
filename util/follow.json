@@ -106,16 +106,7 @@
         "+",  "-",    "==", 
         "!=", "&&"
     ],
-    "VARDECLARATION": [
-        "typedef",  "struct",
-        "const",    "procedure",
-        "function", "return",
-        "++",       "--",
-        "print",    "identificador",
-        "read",     "global",
-        "local",    "while",
-        "if",       "}"
-    ],
+    "VARDECLARATION": ["typedef",  "struct", "const", "procedure", "function", "var"],
     "PRIMEIRAVAR": [
         "typedef",  "struct",
         "const",    "procedure",
