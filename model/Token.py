@@ -23,6 +23,9 @@ class Token:
 
     def getType(self):
         return self.type
+
+    def toString(self):
+        return f"{self.current_line} {self.type} {self.value}"
     
     def setType(self,type):
         #Função que altera o tipo de token

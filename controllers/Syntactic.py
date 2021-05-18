@@ -5,14 +5,18 @@ class Syntactic:
         self.token = ''    
         self.firstSet  = firstSet
         self.followSet = followSet
+        self.token_list = []
 
     def run(self):
         self.getNextToken()
         self.inicio()
+        self.lexical.file.print_file(self.token_list)
 
 
     def getNextToken(self):
         self.token = self.lexical.nextToken()
+        if self.token is not None:
+            self.token_list.append(self.token.toString())
     
     def getError(self, sync_tokens:list):
         while(self.token is not None):
@@ -38,7 +42,7 @@ class Syntactic:
             elif(self.token.getValue() in self.firstSet["METHODS"]):
                 self.methods()
             else:
-                print("ERROR on INICIO. Expecting ", self.firstSet["INICIO"], " got: " +self.token.getValue()) 
+                self.token_list.append("ERROR on INICIO. Expecting ", self.firstSet["INICIO"], " got: " +self.token.getValue()) 
 
     def header1(self):
         if self.token is not None:
@@ -54,7 +58,7 @@ class Syntactic:
             elif self.token.getValue() in self.firstSet["METHODS"]:
                 self.methods()
             else:
-                print("ERROR on HEADER1. Expecting ", self.firstSet["HEADER1"], " got: " +self.token.getValue())
+                self.token_list.append("ERROR on HEADER1. Expecting ", self.firstSet["HEADER1"], " got: " +self.token.getValue())
 
 
     def header2(self):
@@ -71,7 +75,7 @@ class Syntactic:
             elif self.token.getValue() in self.firstSet["METHODS"]:
                 self.methods()
             else: 
-                print("ERROR on HEADER2. Expecting ", self.firstSet["HEADER2"], " got: " +self.token.getValue())
+                self.token_list.append("ERROR on HEADER2. Expecting ", self.firstSet["HEADER2"], " got: " +self.token.getValue())
 
     def header3(self):
         if self.token.getValue() in self.firstSet["TYPEDEFDECLARATION"]:
@@ -83,7 +87,7 @@ class Syntactic:
         elif self.token.getValue() in self.firstSet["METHODS"]:
             self.methods()
         else: 
-            print(f"ERROR on HEADER3 line {self.token.current_line}: Expecting ", self.firstSet["HEADER3"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on HEADER3 line {self.token.current_line}: Expecting ", self.firstSet["HEADER3"], " got: " +self.token.getValue())
 
     def methods(self):
         if self.token is not None:
@@ -111,7 +115,7 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["CONTFCALL"] or self.token.getType() in self.firstSet["CONTFCALL"]:
                     self.contFCall()
                 else:
-                     print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTFCALL"], " got: " +self.token.getValue())
+                     self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTFCALL"], " got: " +self.token.getValue())
         elif self.token.getType() in self.firstSet["FUNCTIONCALL"]:
             self.functionCall()
         elif self.token.getValue() == '(':
@@ -121,9 +125,9 @@ class Syntactic:
                 if self.token.getValue() == ')':
                     self.getNextToken()
                 else:
-                    print("ERROR expecting ')' GOT "+ self.token.getValue())
+                    self.token_list.append("ERROR expecting ')' GOT "+ self.token.getValue())
             else:
-                print("ERROR expecting ", self.firstSet["LOGICALOP"] + "GOT "+ self.token.getValue())
+                self.token_list.append("ERROR expecting ", self.firstSet["LOGICALOP"] + "GOT "+ self.token.getValue())
     
                 
     
@@ -156,11 +160,11 @@ class Syntactic:
                 if self.token.getType() == "IDE":
                     self.identificador()
                 else:
-                    print("ERROR expecting ", self.firstSet["IDENTIFICADOR"] + "GOT "+ self.token.getValue())
+                    self.token_list.append("ERROR expecting ", self.firstSet["IDENTIFICADOR"] + "GOT "+ self.token.getValue())
             else:
-                print("ERROR expecting '.' GOT" + self.token.getValue())
+                self.token_list.append("ERROR expecting '.' GOT" + self.token.getValue())
         else:
-            print("ERROR expecting 'global' GOT "+ self.token.getValue())
+            self.token_list.append("ERROR expecting 'global' GOT "+ self.token.getValue())
 
     def local(self):
             if self.token.getValue() == 'local':
@@ -170,11 +174,11 @@ class Syntactic:
                     if self.token.getType() == "IDE":
                         self.identificador()
                     else:
-                        print("ERROR expecting ", self.firstSet["IDENTIFICADOR"] + "GOT "+ self.token.getValue())
+                        self.token_list.append("ERROR expecting ", self.firstSet["IDENTIFICADOR"] + "GOT "+ self.token.getValue())
                 else:
-                    print("ERROR expecting '.' GOT" + self.token.getValue())
+                    self.token_list.append("ERROR expecting '.' GOT" + self.token.getValue())
             else:
-                print("ERROR expecting 'local' GOT "+ self.token.getValue())
+                self.token_list.append("ERROR expecting 'local' GOT "+ self.token.getValue())
 
     def aritmeticValue(self):
         if self.token.getType() =="IDE":
@@ -186,7 +190,7 @@ class Syntactic:
         elif self.token.getType() == "CAD":
             self.getNextToken()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expection aritmetic value")
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expection aritmetic value")
 
     def dataType(self):
         return True if (self.token.getValue() in self.firstSet["DATATYPE"] or self.token.getType()=="IDE") else False
@@ -210,9 +214,9 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["CONTIDENTIFICADOR"]:
                     self.contIdentificador()
             else:
-                print(f"ERROR on line {self.token.current_line}: Identifier expected")
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Identifier expected")
         else:
-            print(f"ERROR on line {self.token.current_line}: '.' token expected")
+            self.token_list.append(f"ERROR on line {self.token.current_line}: '.' token expected")
 
     def vetorE1(self):
         if self.token.getValue() =='[':
@@ -227,9 +231,9 @@ class Syntactic:
                     self.vetorE1()
                     self.matrizE2()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"]," got: "+ self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"]," got: "+ self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting '[' token. got: "+self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '[' token. got: "+self.token.getValue())
         
     def vetorE2(self):
         if self.token.getValue() in self.firstSet["STRUCTE1"]:
@@ -243,9 +247,9 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["MATRIZE2"]:
                     self.matrizE2()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VETORE1"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VETORE1"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VETORE1"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VETORE1"], " got: " +self.token.getValue())
 
     def matrizE2(self):
         if self.token.getValue() in self.firstSet["STRUCTE1"]:
@@ -259,13 +263,13 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["PRIMEIRAVAR"] or self.token.getType() in self.firstSet["PRIMEIRAVAR"]:
                     self.primeiraVar()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRIMEIRAVAR"], " got: " +self.token.getValue()) 
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRIMEIRAVAR"], " got: " +self.token.getValue()) 
                     self.getError(self.followSet["VARDECLARATION"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting {'{'} "+ " got: " +self.token.getValue()) 
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'{'} "+ " got: " +self.token.getValue()) 
                 self.getError(self.followSet["VARDECLARATION"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting 'var' "+ " got: " +self.token.getValue())           
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'var' "+ " got: " +self.token.getValue())           
             self.getError(self.followSet["VARDECLARATION"])
 
     def primeiraVar(self):
@@ -274,10 +278,10 @@ class Syntactic:
             if self.token.getType() in self.firstSet["VARID"]:
                 self.varId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())
                 self.getError(self.followSet["VARDECLARATION"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTINUESOS"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTINUESOS"], " got: " +self.token.getValue())
             self.getError(self.followSet["VARDECLARATION"])
 
     def continueSos(self):
@@ -286,7 +290,7 @@ class Syntactic:
             if self.dataType():
                 self.getNextToken()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting datatype token"+" got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting datatype token"+" got: " +self.token.getValue())
                 self.getError(self.followSet["VARDECLARATION"])
         elif self.dataType():
             self.getNextToken()
@@ -299,7 +303,7 @@ class Syntactic:
             if self.token.getType() in self.firstSet["VARID"]:
                 self.varId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())
                 self.getError(self.followSet["VARDECLARATION"])
         elif self.token.getValue() == '}':
             self.getNextToken()
@@ -312,10 +316,10 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["VAREXP"]:
                 self.varExp()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VAREXP"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VAREXP"], " got: " +self.token.getValue())
                 self.getError(self.followSet["VARDECLARATION"])
         else:
-            print(f"ERROR on line {self.token.current_line}: IDE expected")
+            self.token_list.append(f"ERROR on line {self.token.current_line}: IDE expected")
             self.getError(self.followSet["VARDECLARATION"])
 
     def varExp(self):
@@ -324,7 +328,7 @@ class Syntactic:
             if self.token.getType() in self.firstSet["VARID"]:
                 self.varId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())   
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())   
                 self.getError(self.followSet["VARDECLARATION"])
         elif self.token.getValue() == '=':
             self.getNextToken()
@@ -332,14 +336,14 @@ class Syntactic:
                 self.value()
                 self.verifVar()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
                 self.getError(self.followSet["VARDECLARATION"])
         elif self.token.getValue() == ';':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["PROXVAR"] or self.token.getType() in self.firstSet["PROXVAR"]:
                 self.proxVar()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVAR"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVAR"], " got: " +self.token.getValue())
                 self.getError(self.followSet["VARDECLARATION"])
         elif self.token.getValue() == '[':
             self.getNextToken()
@@ -350,13 +354,13 @@ class Syntactic:
                     if self.token.getValue() in self.firstSet["ESTRUTURA"]:
                         self.estrutura()
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ESTRUTURA"], " got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ESTRUTURA"], " got: " +self.token.getValue())
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ']' "" got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ']' "" got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}")
+            self.token_list.append(f"ERROR on line {self.token.current_line}")
 
     
     def estrutura(self):
@@ -369,31 +373,31 @@ class Syntactic:
                     if self.token.getValue() in self.firstSet["CONTMATRIZ"]:
                         self.contMatriz()
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTMATRIZ"], " got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTMATRIZ"], " got: " +self.token.getValue())
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ] "+ " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ] "+ " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
         elif self.token.getValue() =='=':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["INITVETOR"]:
                 self.initVetor()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["INITVETOR"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["INITVETOR"], " got: " +self.token.getValue())
         elif self.token.getValue() == ',':
             self.getNextToken()
             if self.token.getType() in self.firstSet["VARID"]:
                 self.varId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())
         elif self.token.getValue() == ';':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["PROXVAR"] or self.token.getType() in self.firstSet["PROXVAR"]:
                 self.proxVar()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVAR"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVAR"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}")
+            self.token_list.append(f"ERROR on line {self.token.current_line}")
 
     def initVetor(self):
         if self.token.getValue() == '[':
@@ -403,11 +407,11 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["PROXVETOR"]:
                     self.proxVetor()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVETOR"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVETOR"], " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting '['  got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '['  got: " +self.token.getValue())
 
     
     def proxVetor(self):
@@ -418,17 +422,17 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["PROXVETOR"]:
                     self.proxVetor()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVETOR"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVETOR"], " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
         elif self.token.getValue() ==']':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["VERIFVAR"]:
                 self.verifVar()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFVAR"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFVAR"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ',' or ']' got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ',' or ']' got: " +self.token.getValue())
 
     def contMatriz(self):
         if self.token.getValue() == '=':
@@ -436,21 +440,21 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["INITMATRIZ"]:
                 self.initMatriz()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["INITMATRIZ"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["INITMATRIZ"], " got: " +self.token.getValue())
         elif self.token.getValue() == ',':
             self.getNextToken()
             if self.token.getType() in self.firstSet["VARID"]:
                 self.varId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())
         elif self.token.getValue() == ';':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["PROXVAR"] or self.token.getType() in self.firstSet["PROXVAR"]:
                 self.proxVar()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVAR"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVAR"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}:")
+            self.token_list.append(f"ERROR on line {self.token.current_line}:")
 
     def initMatriz(self):
         if self.token.getValue() == '[':
@@ -458,9 +462,9 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["MATRIZVALUE"]:
                 self.matrizValue()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["MATRIZVALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["MATRIZVALUE"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting '[' got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '[' got: " +self.token.getValue())
 
     def matrizValue(self):
         if self.token.getValue() == '[':
@@ -468,9 +472,9 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["PROXMATRIZ"]:
                 self.proxMatriz()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXMATRIZ"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXMATRIZ"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting '[' got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '[' got: " +self.token.getValue())
     
     def proxMatriz(self):
         if self.token.getValue() == ',':
@@ -480,17 +484,17 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["PROXMATRIZ"]:
                     self.proxMatriz()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXMATRIZ"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXMATRIZ"], " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
         elif self.token.getValue() == ']':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["NEXT"]:
                 self.next()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["NEXT"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["NEXT"], " got: " +self.token.getValue())
         else:
-            print("ERROR")
+            self.token_list.append("ERROR")
 
     def next(self):
         if self.token.getValue() == ',':
@@ -498,15 +502,15 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["MATRIZVALUE"]:
                 self.matrizValue()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["MATRIZVALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["MATRIZVALUE"], " got: " +self.token.getValue())
         elif self.token.getValue() == ']':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["VERIFVAR"]:
                 self.verifVar()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFVAR"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFVAR"], " got: " +self.token.getValue())
         else:
-            print("ERROR")
+            self.token_list.append("ERROR")
 
     def verifVar(self):
         if self.token.getValue() == ',':
@@ -514,15 +518,15 @@ class Syntactic:
             if self.token.getType() in self.firstSet["VARID"]:
                 self.varId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARID"], " got: " +self.token.getValue())
         elif self.token.getValue() ==';':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["PROXVAR"] or self.token.getType() in self.firstSet["PROXVAR"]:
                 self.proxVar()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVAR"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXVAR"], " got: " +self.token.getValue())
         else:
-            print("ERROR")
+            self.token_list.append("ERROR")
 
     def constDeclaration(self):
         if self.token.getValue() =='const':
@@ -532,13 +536,13 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["PRIMEIRACONST"] or self.token.getType() in self.firstSet["PRIMEIRACONST"]:
                     self.primeiraConst()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRIMEIRACONST"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRIMEIRACONST"], " got: " +self.token.getValue())
                     self.getError(self.followSet["PRIMEIRACONST"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: {self.token.getValue()}")
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: {self.token.getValue()}")
                 self.getError(self.followSet["PRIMEIRACONST"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting 'const' got: {self.token.getValue()}")
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'const' got: {self.token.getValue()}")
             self.getError(self.followSet["PRIMEIRACONST"])
 
 
@@ -548,10 +552,10 @@ class Syntactic:
             if self.token.getType() == "IDE":
                 self.constId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getValue())
                 self.getError(self.followSet["PRIMEIRACONST"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTINUECONSTSOS"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTINUECONSTSOS"], " got: " +self.token.getValue())
             self.getError(self.followSet["PRIMEIRACONST"])
     
     def continueConstSos(self):
@@ -560,11 +564,11 @@ class Syntactic:
             if self.dataType():
                 self.getNextToken()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting a datatype token")
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting a datatype token")
         elif self.dataType():
             self.getNextToken()
         else:
-            print("ERROR")
+            self.token_list.append("ERROR")
 
     def proxConst(self):
         if self.token.getValue() in self.firstSet["CONTINUECONSTSOS"] or self.token.getType() in self.firstSet["CONTINUECONSTSOS"]:
@@ -572,12 +576,12 @@ class Syntactic:
             if self.token.getType() in self.firstSet["CONSTID"]:
                 self.constId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getType())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getType())
                 self.getError(self.followSet["PRIMEIRACONST"])
         elif self.token.getValue() == '}':
             self.getNextToken()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXCONST"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXCONST"], " got: " +self.token.getValue())
     
     def constId(self):
         if self.token.getType() == "IDE":
@@ -585,10 +589,10 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["CONSTEXP"]:
                 self.constExp()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTEXP"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTEXP"], " got: " +self.token.getValue())
                 self.getError(self.followSet["PRIMEIRACONST"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token")
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token")
     
 
     def constExp(self):
@@ -599,10 +603,10 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["VERIFCONST"]:
                     self.verifConst()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
                     self.getError(self.followSet["PRIMEIRACONST"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
                 self.getError(self.followSet["PRIMEIRACONST"])
         elif self.token.getValue() =='[':
             self.getNextToken()
@@ -613,13 +617,13 @@ class Syntactic:
                     if self.token.getValue() in self.firstSet["ESTRUTURACONST"]:
                         self.estruturaConst()
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ESTRUTURACONST"], " got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ESTRUTURACONST"], " got: " +self.token.getValue())
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ']' token")
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ']' token")
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}")
+            self.token_list.append(f"ERROR on line {self.token.current_line}")
 
     def estruturaConst(self):
         if self.token.getValue() == '[':
@@ -633,13 +637,13 @@ class Syntactic:
                         if self.token.getValue() in self.firstSet["INITCONSTMATRIZ"]:
                             self.initConstMatriz()
                         else:
-                            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["INITCONSTMATRIZ"], " got: " +self.token.getValue())
+                            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["INITCONSTMATRIZ"], " got: " +self.token.getValue())
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting '=' got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '=' got: " +self.token.getValue())
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ']' got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ']' got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
         elif self.token.getValue() == '=':
             self.getNextToken()
             if self.token.getValue() == '[':
@@ -649,13 +653,13 @@ class Syntactic:
                     if self.token.getValue() in self.firstSet["PROXCONSTVETOR"]:
                         self.proxConstVetor()
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXCONSTVETOR"], " got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXCONSTVETOR"], " got: " +self.token.getValue())
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting '[' got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '[' got: " +self.token.getValue())
         else:
-            print("ERROR")
+            self.token_list.append("ERROR")
 
     def proxConstVetor(self):
         if self.token.getValue() == ',':
@@ -665,17 +669,17 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["PROXCONSTVETOR"]:
                     self.proxConstVetor()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXCONSTVETOR"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXCONSTVETOR"], " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
         elif self.token.getValue() == ']':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["VERIFCONST"]:
                 self.verifConst()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
         else:
-            print("ERROR")
+            self.token_list.append("ERROR")
 
     def initConstMatriz(self):
         if self.token.getValue() =='[':
@@ -683,9 +687,9 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["MATRIZCONSTVALUE"]:
                 self.matrizConstValue()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["MATRIZCONSTVALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["MATRIZCONSTVALUE"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting '[' got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '[' got: " +self.token.getValue())
 
     def matrizConstValue(self):
         if self.token.getValue() =='[':
@@ -695,11 +699,11 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["PROXCONSTMATRIZ"]:
                     self.proxConstMatriz()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXCONSTMATRIZ"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXCONSTMATRIZ"], " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting '[' got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '[' got: " +self.token.getValue())
     
     def proxConstMatriz(self):
         if self.token.getValue() ==',':
@@ -709,17 +713,17 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["PROXCONSTMATRIZ"]:
                     self.proxConstMatriz()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXCONSTMATRIZ"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXCONSTMATRIZ"], " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
         elif self.token.getValue() == ']':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["NEXTCONST"]:
                 self.nextConst()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["NEXTCONST"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["NEXTCONST"], " got: " +self.token.getValue())
         else:
-            print("ERROR")
+            self.token_list.append("ERROR")
 
     def nextConst(self):
         if self.token.getValue() == ',':
@@ -727,15 +731,15 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["MATRIZCONSTVALUE"]:
                 self.matrizConstValue()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["MATRIZCONSTVALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["MATRIZCONSTVALUE"], " got: " +self.token.getValue())
         elif self.token.getValue() == ']':
             self.getNextToken()
             if self.token.getValue() in self.firstSet["VERIFCONST"]:
                 self.verifConst()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
         else:
-            print("ERROR")
+            self.token_list.append("ERROR")
 
     def verifConst(self):
         if self.token.getValue() ==',':
@@ -743,7 +747,7 @@ class Syntactic:
             if self.token.getType() in self.firstSet["CONSTID"]:
                 self.constId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONSTID"], " got: " +self.token.getValue())
                 self.getError(self.followSet["PRIMEIRACONST"])
 
         elif self.token.getValue() == ';':
@@ -751,9 +755,9 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["PROXCONST"] or self.token.getType() in self.firstSet["PROXCONST"]:
                 self.proxConst()
             else:
-                print("ERROR verifConst. Expecting ", self.firstSet["PROXCONST"], " got: " +self.token.getValue())
+                self.token_list.append("ERROR verifConst. Expecting ", self.firstSet["PROXCONST"], " got: " +self.token.getValue())
         else:
-            print("ERROR verifConst. Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
+            self.token_list.append("ERROR verifConst. Expecting ", self.firstSet["VERIFCONST"], " got: " +self.token.getValue())
 
     
     def function(self):
@@ -768,19 +772,19 @@ class Syntactic:
                         if self.token.getValue() in self.firstSet["CONTINUEFUNCTION"] or self.token.getType() in self.firstSet["CONTINUEFUNCTION"]:
                             self.continueFunction()
                         else:
-                            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTINUEFUNCTION"], " got: " +self.token.getValue())
+                            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTINUEFUNCTION"], " got: " +self.token.getValue())
                             self.getError(self.followSet["FUNCTION"])
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
                         self.getError(self.followSet["FUNCTION"])
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting identifier token got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting identifier token got: " +self.token.getValue())
                     self.getError(self.followSet["FUNCTION"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting datatype token")
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting datatype token")
                 self.getError(self.followSet["FUNCTION"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting 'function' got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'function' got: " +self.token.getValue())
             self.getError(self.followSet["FUNCTION"])
 
     def continueFunction(self):
@@ -789,17 +793,17 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["BlockFunction"]:
                 self.blockFunction()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BlockFunction"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BlockFunction"], " got: " +self.token.getValue())
                 self.getError(self.followSet["FUNCTION"])
         elif self.token.getValue() == ")":
             self.getNextToken()
             if self.token.getValue() in self.firstSet["BlockFunction"]:
                 self.blockFunction()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BlockFunction"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BlockFunction"], " got: " +self.token.getValue())
                 self.getError(self.followSet["FUNCTION"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTINUEFUNCTION"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTINUEFUNCTION"], " got: " +self.token.getValue())
             self.getError(self.followSet["FUNCTION"])
 
     def parameters(self):
@@ -810,13 +814,13 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["PARAMLOOP"]:
                     self.paramLoop()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PARAMLOOP"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PARAMLOOP"], " got: " +self.token.getValue())
                     self.getError(self.followSet["PARAMETERS"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting IDE token, got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting IDE token, got: " +self.token.getValue())
                 self.getError(self.followSet["PARAMETERS"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting datatype token, got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting datatype token, got: " +self.token.getValue())
             self.getError(self.followSet["PARAMETERS"])
     
     def paramLoop(self):
@@ -825,12 +829,12 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["PARAMETERS"] or self.token.getType() in self.firstSet["PARAMETERS"]:
                 self.parameters()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PARAMETERS"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PARAMETERS"], " got: " +self.token.getValue())
                 self.getError(self.followSet["PARAMETERS"])
         elif self.token.getValue() ==")":
             self.getNextToken()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PARAMLOOP"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PARAMLOOP"], " got: " +self.token.getValue())
             self.getError(self.followSet["PARAMETERS"])
 
     def blockFunction(self):
@@ -843,16 +847,16 @@ class Syntactic:
                     if self.token.getValue() == '}':
                         self.getNextToken()
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
                         self.getError(self.followSet["FUNCTION"])
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
                     self.getError(self.followSet["FUNCTION"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BlockFuncContent"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BlockFuncContent"], " got: " +self.token.getValue())
                 self.getError(self.followSet["FUNCTION"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BlockFunction"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BlockFunction"], " got: " +self.token.getValue())
             self.getError(self.followSet["FUNCTION"])
 
     def blockFuncContent(self):
@@ -861,19 +865,19 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["CONTENT1"] or self.token.getType() in self.firstSet["CONTENT1"]:
                 self.content1()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT1"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT1"], " got: " +self.token.getValue())
                 self.getError(self.followSet["BlockFuncContent"])
         elif self.token.getValue() in self.firstSet["CONSTDECLARATION"]:
             self.constDeclaration()
             if self.token.getValue() in self.firstSet["CONTENT2"] or self.token.getType() in self.firstSet["CONTENT2"]:
                 self.content2()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT2"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT2"], " got: " +self.token.getValue())
                 self.getError(self.followSet["BlockFuncContent"])
         elif self.token.getValue() in self.firstSet["FUNCCONTENT"] or self.token.getType() in self.firstSet["FUNCCONTENT"]:
             self.funcContent()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BlockFuncContent"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BlockFuncContent"], " got: " +self.token.getValue())
             self.getError(self.followSet["BlockFuncContent"])
                         
     def funcContent(self):
@@ -884,19 +888,19 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["VALUE"] or self.token.getType() in self.firstSet["VALUE"]:
                     self.value()
                 else:
-                    print(f"ERROR on line {self.token.current_line}:. Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}:. Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting 'return' got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'return' got: " +self.token.getValue())
                 self.getError(self.followSet["FUNCCONTENT"])
         elif self.token.getValue() == "return":
                 self.getNextToken()
                 if self.token.getValue() in self.firstSet["VALUE"] or self.token.getType() in self.firstSet["VALUE"]:
                     self.value()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
                     self.getError(self.followSet["FUNCCONTENT"])
         else: 
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FUNCCONTENT"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FUNCCONTENT"], " got: " +self.token.getValue())
             self.getError(self.followSet["FUNCCONTENT"])
 
     def content1(self):
@@ -905,12 +909,12 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["CONTENT3"] or self.token.getType() in self.firstSet["CONTENT3"]:
                 self.content3()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT3"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT3"], " got: " +self.token.getValue())
                 self.getError(self.followSet["CONTENT1"])
         elif self.token.getValue() in self.firstSet["FUNCCONTENT"] or self.token.getType() in self.firstSet["FUNCCONTENT"]:
             self.funcContent()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT1"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT1"], " got: " +self.token.getValue())
             self.getError(self.followSet["CONTENT1"])
 
     def content2(self):
@@ -919,12 +923,12 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["CONTENT3"] or self.token.getType() in self.firstSet["CONTENT3"]:
                 self.content3()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT3"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT3"], " got: " +self.token.getValue())
                 self.getError(self.followSet["CONTENT2"])     
         elif self.token.getValue() in self.firstSet["FUNCCONTENT"] or self.token.getType() in self.firstSet["FUNCCONTENT"]:
             self.funcContent()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT2"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT2"], " got: " +self.token.getValue())
             self.getError(self.followSet["CONTENT2"])
 
 
@@ -932,7 +936,7 @@ class Syntactic:
         if self.token.getValue() in self.firstSet["FUNCCONTENT"] or self.token.getType() in self.firstSet["FUNCCONTENT"]:
             self.funcContent()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT3"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTENT3"], " got: " +self.token.getValue())
 
     
 
@@ -944,13 +948,13 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["STRUCTVARS"]:
                     self.structVars()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARS"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARS"], " got: " +self.token.getValue())
                     self.getError(self.firstSet["INICIO"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
                 self.getError(self.firstSet["INICIO"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTDECLARATION"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTDECLARATION"], " got: " +self.token.getValue())
             self.getError(self.firstSet["INICIO"])
         
     def structVars(self):
@@ -963,13 +967,13 @@ class Syntactic:
                     if self.token.getValue() in self.firstSet["FIRSTSTRUCTVAR"] or self.token.getType() in self.firstSet["FIRSTSTRUCTVAR"]:
                         self.firstStructVar()
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FIRSTSTRUCTVAR"], " got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FIRSTSTRUCTVAR"], " got: " +self.token.getValue())
                         self.getError(self.firstSet["INICIO"])
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: {self.token.getValue()}")
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: {self.token.getValue()}")
                     self.getError(self.firstSet["INICIO"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting 'var' got: {self.token.getValue()}")
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'var' got: {self.token.getValue()}")
                 self.getError(self.firstSet["INICIO"])
 
         elif(self.token.getValue() == 'extends'):
@@ -985,22 +989,22 @@ class Syntactic:
                             if self.token.getValue() in self.firstSet["FIRSTSTRUCTVAR"] or self.token.getType() in self.firstSet["FIRSTSTRUCTVAR"]:
                                  self.firstStructVar()
                             else:
-                                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FIRSTSTRUCTVAR"], " got: " +self.token.getValue())
+                                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FIRSTSTRUCTVAR"], " got: " +self.token.getValue())
                                 self.getError(self.firstSet["INICIO"])
                         else:
-                            print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
+                            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
                             self.getError(self.firstSet["INICIO"])
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting 'var' got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'var' got: " +self.token.getValue())
                         self.getError(self.firstSet["INICIO"])
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
                     self.getError(self.firstSet["HEADER3"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token,  got: " +self.token.getType())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token,  got: " +self.token.getType())
                 self.getError(self.firstSet["INICIO"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARS"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARS"], " got: " +self.token.getValue())
             self.getError(self.firstSet["INICIO"])
 
         
@@ -1010,10 +1014,10 @@ class Syntactic:
             if self.token.getType() == 'IDE':
                 self.structVarId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARID"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARID"], " got: " +self.token.getValue())
                 self.getError(self.firstSet["INICIO"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FIRSTSTRUCTVAR"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FIRSTSTRUCTVAR"], " got: " +self.token.getValue())
             self.getError(self.firstSet["INICIO"])
 
     def structVarId(self):
@@ -1022,10 +1026,10 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["STRUCTVAREXP"]:
                 self.structVarExp()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVAREXP"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVAREXP"], " got: " +self.token.getValue())
                 self.getError(self.firstSet["INICIO"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
             self.getError(self.firstSet["INICIO"])
     
     def structVarExp(self):
@@ -1034,13 +1038,13 @@ class Syntactic:
             if self.token.getType() in self.firstSet["STRUCTVARID"]:
                 self.structVarId()
             else:
-                print("ERROR structVarExp1. Expecting ", self.firstSet["STRUCTVARID"], " got: " +self.token.getValue())
+                self.token_list.append("ERROR structVarExp1. Expecting ", self.firstSet["STRUCTVARID"], " got: " +self.token.getValue())
         elif(self.token.getValue() == ';'):
             self.getNextToken()
             if self.token.getValue() in self.firstSet["PROXSTRUCTVAR"] or self.token.getType() in self.firstSet["PROXSTRUCTVAR"]:
                 self.proxStructVar()
             else:
-                print("ERROR structVarExp2. Expecting ", self.firstSet["PROXSTRUCTVAR"], " got: " +self.token.getValue())
+                self.token_list.append("ERROR structVarExp2. Expecting ", self.firstSet["PROXSTRUCTVAR"], " got: " +self.token.getValue())
         elif(self.token.getValue() == '['):
             self.getNextToken()
             if(self.inteiro(self.token.getValue())):
@@ -1063,25 +1067,25 @@ class Syntactic:
                     if self.token.getValue() in self.firstSet["CONTSTRUCTMATRIZ"]:
                         self.contStructMatriz()
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTSTRUCTMATRIZ"], " got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTSTRUCTMATRIZ"], " got: " +self.token.getValue())
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ']' token got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ']' token got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting integer token, got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting integer token, got: " +self.token.getValue())
         elif(self.token.getValue() ==','):
             self.getNextToken()
             if self.token.getType() in self.firstSet["STRUCTVARID"]:
                 self.structVarId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARID"], " got: " +self.token.getType())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARID"], " got: " +self.token.getType())
         elif(self.token.getValue() == ';'):
             self.getNextToken()
             if self.token.getValue() in self.firstSet["PROXSTRUCTVAR"] or self.token.getType() in self.firstSet["PROXSTRUCTVAR"]:
                 self.proxStructVar()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXSTRUCTVAR"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXSTRUCTVAR"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTMATRIZ"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTMATRIZ"], " got: " +self.token.getValue())
 
 
     def proxStructVar(self):
@@ -1090,17 +1094,17 @@ class Syntactic:
             if self.token.getType() in self.firstSet["STRUCTVARID"]:
                 self.structVarId()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARID"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["STRUCTVARID"], " got: " +self.token.getValue())
                 self.getError(self.firstSet["INICIO"])
         elif(self.token.getValue() == "}"):
             self.getNextToken()
             if(self.token.getValue() == "}"):
                 self.getNextToken()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
                 self.getError(self.firstSet["INICIO"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXSTRUCTVAR"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROXSTRUCTVAR"], " got: " +self.token.getValue())
             self.getError(self.firstSet["INICIO"])
     
     def opNegate(self):
@@ -1109,7 +1113,7 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["ARITMETICVALUE"] or self.token.getType() in self.firstSet["ARITMETICVALUE"]:
                 self.aritmeticValue()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICVALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICVALUE"], " got: " +self.token.getValue())
         elif self.token.getValue() in self.firstSet["ARITMETICVALUE"] or self.token.getType() in self.firstSet["ARITMETICVALUE"]:
             self.aritmeticValue()
         elif self.token.getValue() == '(':
@@ -1119,11 +1123,11 @@ class Syntactic:
                 if self.token.getValue() == ")":
                     self.getNextToken()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ')' got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ')' got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OpNegate"], " got: " +self.token.getValue())  
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OpNegate"], " got: " +self.token.getValue())  
 
     def opMult(self):
         if self.token.getValue() in self.firstSet["OpNegate"] or self.token.getType() in self.firstSet["OpNegate"]:
@@ -1131,7 +1135,7 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["AUXSTATE2"]:
                 self.auxState2()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPMULT"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPMULT"], " got: " +self.token.getValue())
     
     def auxState2(self):
         if self.token.getValue() in self.firstSet["MULTSYMBOL"]:
@@ -1139,7 +1143,7 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["Opmult"] or self.token.getType() in self.firstSet["Opmult"]:
                 self.opMult()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["Opmult"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["Opmult"], " got: " +self.token.getValue())
     
     def multSymbol(self):
         if self.token.getValue() == '*':
@@ -1147,7 +1151,7 @@ class Syntactic:
         elif self.token.getValue() == '/':
             self.getNextToken()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["MULTSYMBOL"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["MULTSYMBOL"], " got: " +self.token.getValue())
 
     def aritimeticOp(self):
         if self.token.getValue() in self.firstSet["Opmult"] or self.token.getType() in self.firstSet["Opmult"]:
@@ -1155,7 +1159,7 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["OPMULT2"]:
                 self.opMult2()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITIMETICOP"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITIMETICOP"], " got: " +self.token.getValue())
 
     def opMult2(self):
         if self.token.getValue() in self.firstSet["ARITSYMBOL"]:
@@ -1163,7 +1167,7 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["ARITMETICOP"] or self.token.getType() in self.firstSet["ARITMETICOP"]:
                 self.aritimeticOp()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITMETICOP"], " got: " +self.token.getValue())
 
     def aritSymbol(self):
         if self.token.getValue() =="+":
@@ -1171,7 +1175,7 @@ class Syntactic:
         elif self.token.getValue =='-':
             self.getNextToken()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITSYMBOL"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ARITSYMBOL"], " got: " +self.token.getValue())
     
     def opBoolValue(self):
         if self.token.getValue() in self.firstSet["ARITMETICOP"] or self.token.getType() in self.firstSet["ARITMETICOP"]:
@@ -1185,11 +1189,11 @@ class Syntactic:
                 if self.token.getValue() ==')':
                     self.getNextToken()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ')' got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ')' got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["LOGICALOP"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["LOGICALOP"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE"], " got: " +self.token.getValue())
 
     def relacionalOp(self):
         if self.token.getValue() in self.firstSet["OPBOOLVALUE"] or self.token.getType() in self.firstSet["OPBOOLVALUE"]:
@@ -1199,11 +1203,11 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["OPBOOLVALUE"] or self.token.getType() in self.firstSet["OPBOOLVALUE"]:
                     self.opBoolValue()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE"], " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["RELSYMBOL"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["RELSYMBOL"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["RELACIONALOP"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["RELACIONALOP"], " got: " +self.token.getValue())
 
     def relSymbol(self):
         if self.token.getValue() =='<':
@@ -1217,7 +1221,7 @@ class Syntactic:
         elif self.token.getValue() == '>=':
             self.getNextToken()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["RELSYMBOL"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["RELSYMBOL"], " got: " +self.token.getValue())
     
     def opBoolValue2(self):
         if self.token.getValue() in self.firstSet["OPBOOLVALUE"] or self.token.getType() in self.firstSet["OPBOOLVALUE"]:
@@ -1225,7 +1229,7 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["OPBOOLVALUE3"]:
                 self.opBoolValue3()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE2"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE2"], " got: " +self.token.getValue())
     
     def opBoolValue3(self):
         if self.token.getValue() in self.firstSet["RELSYMBOL"]:
@@ -1233,7 +1237,7 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["OPBOOLVALUE"] or self.token.getType() in self.firstSet["OPBOOLVALUE"]:
                 self.opBoolValue()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE"], " got: " +self.token.getValue())
 
     def logicSymbol(self):
         if self.token.getValue() =="!=":
@@ -1243,7 +1247,7 @@ class Syntactic:
         elif self.token.getValue()=="||":
             self.getNextToken()
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["LOGICSYMBOL"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["LOGICSYMBOL"], " got: " +self.token.getValue())
 
     def logicalOp(self):
         if self.token.getValue() in self.firstSet["OPBOOLVALUE2"] or self.token.getType() in self.firstSet["OPBOOLVALUE2"]:
@@ -1253,11 +1257,11 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["OPBOOLVALUE2"] or self.token.getType() in self.firstSet["OPBOOLVALUE2"]:
                     self.opBoolValue2()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE2"], " got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE2"], " got: " +self.token.getValue())
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["LOGICSYMBOL"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["LOGICSYMBOL"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["LOGICALOP"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["LOGICALOP"], " got: " +self.token.getValue())
 
     def negBoolValue(self):
         if self.token.getValue() == "!":
@@ -1265,9 +1269,9 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["VARIAVEL"] or self.token.getType() in self.firstSet["VARIAVEL"]:
                 self.variavel()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARIAVEL"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARIAVEL"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["NEGBOOLVALUE"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["NEGBOOLVALUE"], " got: " +self.token.getValue())
 
     def incrementOp(self, variavel=True):
         enter = False
@@ -1279,14 +1283,14 @@ class Syntactic:
             if self.token.getValue() =="++":
                 self.getNextToken()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting '++' got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '++' got: " +self.token.getValue())
         elif self.token.getValue() =="++":
             self.getNextToken()
             if self.token.getValue() in self.firstSet["VARIAVEL"] or self.token.getType() in self.firstSet["VARIAVEL"]:
                 self.variavel()
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARIAVEL"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARIAVEL"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["INCREMENTOP"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["INCREMENTOP"], " got: " +self.token.getValue())
 
     def decrementOp(self, variavel = True):
         enter = False
@@ -1298,15 +1302,15 @@ class Syntactic:
             if self.token.getValue() =="--":
                 self.getNextToken()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting '--' got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '--' got: " +self.token.getValue())
         elif self.token.getValue() =="--":
             self.getNextToken()
             if self.token.getValue() in self.firstSet["VARIAVEL"] or self.token.getType() in self.firstSet["VARIAVEL"]:
                 self.variavel()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARIAVEL"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VARIAVEL"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["DECREMENTOP"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["DECREMENTOP"], " got: " +self.token.getValue())
 
     def boolOperations(self):
         if self.token.getValue() in self.firstSet["OPBOOLVALUE"] or self.token.getType() in self.firstSet["OPBOOLVALUE"]:
@@ -1314,11 +1318,11 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["BOOLOPERATIONS2"]:
                 self.boolOperations2()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS2"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS2"], " got: " +self.token.getValue())
         elif self.token.getValue() in self.firstSet["NEGBOOLVALUE"]:
             self.negBoolValue()
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS"], " got: " +self.token.getValue())
 
     def boolOperations2(self):
         if self.token.getValue() in self.firstSet["BOOLOPERATIONS3"]:
@@ -1330,9 +1334,9 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["OPBOOLVALUE2"] or self.token.getType() in self.firstSet["OPBOOLVALUE2"]:
                 self.opBoolValue2()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE2"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE2"], " got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS2"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS2"], " got: " +self.token.getValue())
 
     def boolOperations3(self):
         if self.token.getValue() in self.firstSet["RELSYMBOL"]:
@@ -1340,9 +1344,9 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["OPBOOLVALUE"] or self.token.getType() in self.firstSet["OPBOOLVALUE"]:
                 self.opBoolValue()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE"], " got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS3"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS3"], " got: " +self.token.getValue())
     
     def boolOperations4(self):
         if self.token.getValue() in self.firstSet["LOGICSYMBOL"]:
@@ -1350,7 +1354,7 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["OPBOOLVALUE2"] or self.token.getType() in self.firstSet["OPBOOLVALUE2"]:
                 self.opBoolValue2()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE2"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["OPBOOLVALUE2"], " got: " +self.token.getValue())
 
     
     def typedefDeclaration(self):
@@ -1359,10 +1363,10 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["CONTTYPEDEFDEC"] or self.token.getType() in self.firstSet["CONTTYPEDEFDEC"]:
                 self.contTypedefDeclaration()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTTYPEDEFDEC"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTTYPEDEFDEC"], " got: " +self.token.getValue())
                 self.getError(self.followSet["TYPEDEFDECLARATION"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["TYPEDEFDECLARATION"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["TYPEDEFDECLARATION"], " got: " +self.token.getValue())
             self.getError(self.followSet["TYPEDEFDECLARATION"])
 
     def contTypedefDeclaration(self):
@@ -1373,10 +1377,10 @@ class Syntactic:
                 if self.token.getValue() == ';':
                     self.getNextToken()
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
                     self.getError(self.followSet["TYPEDEFDECLARATION"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
                 self.getError(self.followSet["TYPEDEFDECLARATION"])
         elif self.token.getValue() == 'struct':
             self.getNextToken()
@@ -1387,16 +1391,16 @@ class Syntactic:
                     if self.token.getValue() == ';':
                         self.getNextToken()
                     else:
-                        print(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
+                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
                         self.getError(self.followSet["TYPEDEFDECLARATION"])
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token, got: " +self.token.getType())
                     self.getError(self.followSet["TYPEDEFDECLARATION"])
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token,' got: " +self.token.getType())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'IDE' token,' got: " +self.token.getType())
                 self.getError(self.followSet["TYPEDEFDECLARATION"])
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTTYPEDEFDEC"], " got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTTYPEDEFDEC"], " got: " +self.token.getValue())
             self.getError(self.followSet["TYPEDEFDECLARATION"])
 
 
@@ -1412,13 +1416,13 @@ class Syntactic:
                         if self.token.getValue() in self.firstSet["PROCCONTENT"] or self.token.getType() in self.firstSet["PROCCONTENT"]:
                             self.procContent()
                         else:
-                             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT"], " got: " +self.token.getValue())
+                             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT"], " got: " +self.token.getValue())
                     else:
-                         print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
+                         self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
                 else:
-                     print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCPARAM"], " got: " +self.token.getValue())
+                     self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCPARAM"], " got: " +self.token.getValue())
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
         elif self.token.getValue() =='start':
             self.getNextToken()
             if self.token.getValue() == '(':
@@ -1430,15 +1434,15 @@ class Syntactic:
                         if self.token.getValue() in self.firstSet["PROCCONTENT"] or self.token.getType() in self.firstSet["PROCCONTENT"]:
                             self.procContent()
                         else:
-                             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT"], " got: " +self.token.getValue())
+                             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT"], " got: " +self.token.getValue())
                     else:
-                         print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
+                         self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
                 else:
-                    print(f"ERROR on line {self.token.current_line}: Expecting ')' got: " +self.token.getValue())
+                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ')' got: " +self.token.getValue())
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCEDURE"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCEDURE"], " got: " +self.token.getValue())
 
     def procParam(self):
         if self.token.getValue() in self.firstSet["PARAMETERS"] or self.token.getType() in self.firstSet["PARAMETERS"]:
@@ -1446,7 +1450,7 @@ class Syntactic:
         elif self.token.getValue() == ')':
             self.getNextToken()
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCPARAM"], " got: " +self.token.getValue())   
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCPARAM"], " got: " +self.token.getValue())   
 
     def procContent(self):
         if self.token.getValue() in self.firstSet["VARDECLARATION"]:
@@ -1454,21 +1458,21 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["PROCCONTENT2"] or self.token.getType() in self.firstSet["PROCCONTENT2"]:
                 self.procContent2()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT2"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT2"], " got: " +self.token.getValue())
         elif self.token.getValue() in self.firstSet["CONSTDECLARATION"]:
             self.constDeclaration()
             if self.token.getValue() in self.firstSet["PROCCONTENT3"] or self.token.getType() in self.firstSet["PROCCONTENT3"]:
                 self.procContent3()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT3"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT3"], " got: " +self.token.getValue())
         elif self.token.getValue() in self.firstSet["CODIGO"] or self.token.getType() in self.firstSet["CODIGO"]:
             self.codigo()
             if self.token.getValue() =='}':
                 self.getNextToken()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT"], " got: " +self.token.getValue())
 
     def procContent2(self):
         if self.token.getValue() in self.firstSet["CONSTDECLARATION"]:
@@ -1476,15 +1480,15 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["PROCCONTENT4"] or self.token.getType() in self.firstSet["PROCCONTENT4"]:
                 self.procContent4()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT4"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT4"], " got: " +self.token.getValue())
         elif self.token.getValue() in self.firstSet["CODIGO"] or self.token.getType() in self.firstSet["CODIGO"]:
             self.codigo()
             if self.token.getValue() == "}":
                 self.getNextToken()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT2"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT2"], " got: " +self.token.getValue())
 
     def procContent3(self):
         if self.token.getValue() in self.firstSet["VARDECLARATION"]:
@@ -1492,15 +1496,15 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["PROCCONTENT4"] or self.token.getType() in self.firstSet["PROCCONTENT4"]:
                 self.procContent4()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT4"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT4"], " got: " +self.token.getValue())
         elif self.token.getValue() in self.firstSet["CODIGO"] or self.token.getType() in self.firstSet["CODIGO"]:
             self.codigo()
             if self.token.getValue() == '}':
                 self.getNextToken()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT3"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT3"], " got: " +self.token.getValue())
 
     def procContent4(self):
         if self.token.getValue() in self.firstSet["CODIGO"] or self.token.getType() in self.firstSet["CODIGO"]:
@@ -1508,9 +1512,9 @@ class Syntactic:
             if self.token.getValue() == '}':
                 self.getNextToken()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT4"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PROCCONTENT4"], " got: " +self.token.getValue())
 
     def codigo(self):
         if self.token.getValue() in self.firstSet["COMANDO"] or self.token.getType() in self.firstSet["COMANDO"]:
@@ -1532,13 +1536,13 @@ class Syntactic:
             if self.token.getValue() ==';':
                 self.getNextToken()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
         elif self.token.getValue() in self.firstSet["DECREMENTOP"] :
             self.decrementOp()
             if self.token.getValue() ==';':
                 self.getNextToken()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
         elif self.token.getValue() in self.firstSet["WHILE"]:
             self.whileFunction()
         elif self.token.getValue() in self.firstSet["CONDITIONAL"]:
@@ -1548,7 +1552,7 @@ class Syntactic:
         elif self.token.getValue() in self.firstSet["STRUCTDECLARATION"]:
             self.structDeclaration()
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["COMANDO"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["COMANDO"], " got: " +self.token.getValue())
 
     def preFuncionAtribuicao(self):
         if self.token.getType() == "IDE":
@@ -1576,11 +1580,11 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["PRINTABLELIST"] or self.token.getType() in self.firstSet["PRINTABLELIST"]:
                     self.printableList()
                 else:
-                     print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRINTABLELIST"], " got: " +self.token.getValue())
+                     self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRINTABLELIST"], " got: " +self.token.getValue())
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRINT"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRINT"], " got: " +self.token.getValue())
         
     
     def printableList(self):
@@ -1589,9 +1593,9 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["NEXTPRINTVALUE"]:
                 self.nextPrintValue()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["NEXTPRINTVALUE"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["NEXTPRINTVALUE"], " got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRINTABLELIST"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRINTABLELIST"], " got: " +self.token.getValue())
 
     def nextPrintValue(self):
         if self.token.getValue() ==',':
@@ -1599,15 +1603,15 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["PRINTABLELIST"] or self.token.getType() in self.firstSet["PRINTABLELIST"]:
                 self.printableList()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRINTABLELIST"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["PRINTABLELIST"], " got: " +self.token.getValue())
         elif self.token.getValue() ==')':
             self.getNextToken()
             if self.token.getValue() ==';':
                 self.getNextToken()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["NEXTPRINTVALUE"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["NEXTPRINTVALUE"], " got: " +self.token.getValue())
 
     
     def atribuicao(self, variavel=True):
@@ -1624,13 +1628,13 @@ class Syntactic:
                     if self.token.getValue() == ';':
                         self.getNextToken()
                     else:
-                         print(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue()) 
+                         self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ';' got: " +self.token.getValue()) 
                 else:
-                     print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                     self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
             else: 
-                print(f"ERROR on line {self.token.current_line}: Expecting '=' got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '=' got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ATRIBUICAO"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["ATRIBUICAO"], " got: " +self.token.getValue())
 
     def functionCall(self):
         if self.token.getValue() == '(':
@@ -1640,9 +1644,9 @@ class Syntactic:
                 if self.token.getValue() == ';':
                     self.getNextToken()
             else:
-                print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTFCALL"], " got: " +self.token.getValue())
+                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTFCALL"], " got: " +self.token.getValue())
         else:
-            print(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
+            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
 
     def contFCall(self):
         if self.token.getValue() in self.firstSet["VALUE"] or self.token.getType() in self.firstSet["VALUE"]:
@@ -1650,11 +1654,11 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["FCALLPARAMS"]:
                 self.fCallParams()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FCALLPARAMS"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FCALLPARAMS"], " got: " +self.token.getValue())
         elif self.token.getValue() == ')':
             self.getNextToken()
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTFCALL"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONTFCALL"], " got: " +self.token.getValue())
 
     def fCallParams(self):
         if self.token.getValue() ==',':
@@ -1664,13 +1668,13 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["FCALLPARAMS"]:
                     self.fCallParams()
                 else:
-                     print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FCALLPARAMS"], " got: " +self.token.getValue())
+                     self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FCALLPARAMS"], " got: " +self.token.getValue())
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["VALUE"], " got: " +self.token.getValue())
         elif self.token.getValue() == ')':
             self.getNextToken()
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FCALLPARAMS"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["FCALLPARAMS"], " got: " +self.token.getValue())
 
     def read(self):
         if self.token.getValue() == 'read':
@@ -1680,11 +1684,11 @@ class Syntactic:
                 if self.token.getValue() in self.firstSet["READPARAMS"] or self.token.getType() in self.firstSet["READPARAMS"]:
                     self.readParams()
                 else:
-                     print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READPARAMS"], " got: " +self.token.getValue())
+                     self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READPARAMS"], " got: " +self.token.getValue())
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READ"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READ"], " got: " +self.token.getValue())
 
     def readParams(self):
         if self.token.getValue() in self.firstSet["VARIAVEL"] or self.token.getType() in self.firstSet["VARIAVEL"]:
@@ -1692,9 +1696,9 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["READLOOP"]:
                 self.readLoop()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READLOOP"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READLOOP"], " got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READPARAMS"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READPARAMS"], " got: " +self.token.getValue())
     
     def readLoop(self):
         if self.token.getValue() ==',':
@@ -1702,15 +1706,15 @@ class Syntactic:
             if self.token.getValue() in self.firstSet["READPARAMS"] or self.token.getType() in self.firstSet["READPARAMS"]:
                 self.readParams()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READPARAMS"], " got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READPARAMS"], " got: " +self.token.getValue())
         elif self.token.getValue() ==')':
             self.getNextToken()
             if self.token.getValue() ==';':
                 self.getNextToken()
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting '; got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '; got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READLOOP"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["READLOOP"], " got: " +self.token.getValue())
 
 
     def whileFunction(self):
@@ -1729,17 +1733,17 @@ class Syntactic:
                                 if self.token.getValue() == '}':
                                     self.getNextToken()
                                 else:
-                                     print(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
+                                     self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
                             else:
-                                 print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CODIGO"], " got: " +self.token.getValue())
+                                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CODIGO"], " got: " +self.token.getValue())
                         else:
-                             print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
+                             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
                     else:
-                         print(f"ERROR on line {self.token.current_line}: Expecting ')' got: " +self.token.getValue())
+                         self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ')' got: " +self.token.getValue())
                 else:
-                     print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS"], " got: " +self.token.getValue())
+                     self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS"], " got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["WHILE"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["WHILE"], " got: " +self.token.getValue())
     
     def conditional(self):
         if self.token.getValue() =='if':
@@ -1759,22 +1763,22 @@ class Syntactic:
                                     if self.token.getValue() =='}':
                                         self.getNextToken()
                                     else:
-                                        print(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
+                                        self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
                                 else:
-                                    print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CODIGO"], " got: " +self.token.getValue())
+                                    self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CODIGO"], " got: " +self.token.getValue())
                             else:
-                                print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
+                                self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
                         else:
-                            print(f"ERROR on line {self.token.current_line}: Expecting 'then' got: " +self.token.getValue())
+                            self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting 'then' got: " +self.token.getValue())
 
                     else:
-                         print(f"ERROR on line {self.token.current_line}: Expecting ')' got: " +self.token.getValue())
+                         self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ')' got: " +self.token.getValue())
                 else:
-                     print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS"], " got: " +self.token.getValue())
+                     self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["BOOLOPERATIONS"], " got: " +self.token.getValue())
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting '(' got: " +self.token.getValue())
         else:
-             print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONDITIONAL"], " got: " +self.token.getValue())
+             self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CONDITIONAL"], " got: " +self.token.getValue())
 
 
     def elsePart(self):
@@ -1787,11 +1791,11 @@ class Syntactic:
                     if self.token.getValue() == '}':
                         self.getNextToken()
                     else:
-                         print(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
+                         self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'}'} got: " +self.token.getValue())
                 else:
-                     print(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CODIGO"], " got: " +self.token.getValue())
+                     self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting ", self.firstSet["CODIGO"], " got: " +self.token.getValue())
             else:
-                 print(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
+                 self.token_list.append(f"ERROR on line {self.token.current_line}: Expecting {'{'} got: " +self.token.getValue())
 
 
     def inteiro(self, token):

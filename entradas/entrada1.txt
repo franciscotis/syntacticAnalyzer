@@ -1,4 +1,4 @@
-const {
+const 
     real PI = 3.141526, e = 2.71, g = 9.98;
 }
 

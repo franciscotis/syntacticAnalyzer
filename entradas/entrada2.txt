@@ -1,0 +1,43 @@
+procedure make_this_work(){
+    print("Hello folks, in this tutorial, i'm going to make pasta");
+    print("If you don't know what pasta is, i'm going to show you!!!!");
+    make_pasta();
+}
+
+
+procedure make_pasta(){
+    var{
+        real farinha_de_trigo = 4.50;
+        int ovos = 10, pimenta = 40, arroz = 210, macarroes, mac;
+        string feijao = "voce ira precisar de tudo isso e muito mais!";
+    }
+   
+        print("Voce ira fazer jogar todos os ovos e quebrar e jogar a casca fora!");
+        while(ovos<10){
+            print("testando")
+        }
+    
+    print("Agora voce ira informar quantos macarroes vc quer!");
+    read(macarroes);
+    mac = macarroes_feitos(ovos, pimenta, arroz, macarroes);
+}
+
+function int macarroes_feitos(int ovos, int pimenta, int arroz, int macarroes){
+    while(macarroes<20){
+        print("Fazendo o macarrao com os ingredientes selecionados!!!");
+        print(ovos);
+        print(pimenta);
+        print(arroz, macarroes, "e tem mais viu");
+    }
+    return 0;
+}
+
+
+function int teste(){
+    print("hello world!");
+    return 0;
+}
+
+procedure start(){
+    make_this_work();
+}
