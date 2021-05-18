@@ -365,7 +365,7 @@
     "PARAMETERS": [ "{" ],
     "PARAMLOOP": [ "{" ],
     "BlockFunction": [ "procedure", "function" ],
-    "BlockFuncContent": [ ";" ],
+    "BlockFuncContent": [ ";", "}"],
     "FUNCCONTENT": [ ";" ],
     "CONTENT1": [ ";" ],
     "CONTENT2": [ ";" ],
