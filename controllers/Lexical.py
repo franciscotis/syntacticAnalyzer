@@ -43,6 +43,18 @@ class Lexical:
         Estado 08 - Estado Cadeia de Caracteres (leitura de um caractere que irá formar uma cadeia de caracteres)
     '''
 
+    def obterToken(self):
+        self.token = self.nextToken()
+        if self.token is not None:
+            while (self.token.getType() == "OpMF" or self.token.getType() == "CoMF" or \
+                self.token.getType() == "SIB" or self.token.getType() == "NMF" or \
+                    self.token.getType() == "CMF"):
+                    self.token = self.nextToken()
+                    if self.token is None: return
+        return self.token
+
+
+
     def nextToken(self):
         if(self.array_pointer <= len(self.content)):
             while(True):

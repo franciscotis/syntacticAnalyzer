@@ -1,4 +1,4 @@
-const 
+con#st {
     real PI = 3.141526, e = 2.71, g = 9.98;
 }
 
@@ -17,7 +17,7 @@ struct funcionario extends pessoa{
 typedef struct Pessoa Pessoa;
 typedef string frase;
 
-var{
+var
     int i = 10, jota = 4, k, l, m, n;
     boolean flag1 = true, flag2, flag3;
     real opa = 3.2, zip, zop, zup;
